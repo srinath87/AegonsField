@@ -14,7 +14,11 @@ public class SriScript : MonoBehaviour {
 	{
 	
 	}
-
+	
+	void sriFunc()
+	{
+		// Sri is Kewl ;)	
+	}
 
 	//blahdeblahdeblah
 	de blah( blah_:uint , blah_:float :blah:vlah:Dlds;lghf;;l )
