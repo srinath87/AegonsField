@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class player_movement : MonoBehaviour {
+public class UnitController : MonoBehaviour {
 	
 	public Vector3 rayHitPoint;
 	public uint onTileIndex;
@@ -29,9 +29,11 @@ public class player_movement : MonoBehaviour {
 
 		
 		if (Input.GetMouseButtonDown(0)){
+			int layerMask = ~(1 << 8);
+			Debug.Log ( layerMask );
 		    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		    RaycastHit hit = new RaycastHit();
-		    if (Physics.Raycast (ray, out hit))
+		    if (Physics.Raycast (ray, out hit , Mathf.Infinity , layerMask ))
 		    {
 		        Debug.DrawLine (ray.origin, hit.point);
 				Debug.Log( hit.point );

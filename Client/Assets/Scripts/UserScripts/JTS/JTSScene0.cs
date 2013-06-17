@@ -4,8 +4,6 @@ using System.Collections;
 public class JTSScene0 : MonoBehaviour {
 	
 	
-	
-	
 	public GameObject[] tileArray;
 	public uint tileSize;
 	public uint tileIndex;
