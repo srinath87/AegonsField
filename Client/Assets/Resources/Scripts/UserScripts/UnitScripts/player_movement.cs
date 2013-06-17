@@ -57,13 +57,13 @@ public class player_movement : MonoBehaviour {
 		
 		uint t_return = 999;
 		uint t_arraySize;
-		t_arraySize = GameObject.FindWithTag("oScene0").GetComponent<scene_0>().tileSize;
+		t_arraySize = GameObject.FindWithTag("oScene0").GetComponent<JTSScene0>().tileSize;
 		GameObject pObj_;
 		float offsetXZ = 0.5f;
 		
 		for ( uint i = 0; i < t_arraySize; i++ ){
 			
-			pObj_ = GameObject.FindWithTag("oScene0").GetComponent<scene_0>().tileArray[ i ];
+			pObj_ = GameObject.FindWithTag("oScene0").GetComponent<JTSScene0>().tileArray[ i ];
 			
 			if (
 				touchVector_.x > pObj_.transform.position.x - offsetXZ &&
@@ -102,14 +102,16 @@ public class player_movement : MonoBehaviour {
 		
 		uint t_return = 999;
 		uint t_arraySize;
-		t_arraySize = GameObject.FindWithTag("oScene0").GetComponent<scene_0>().tileSize;
+		//t_arraySize = GameObject.FindWithTag("Scripts/UserScripts/JTS/JTSScene0").GetComponent<JTSScene0>().tileSize;
+		t_arraySize = GameObject.FindWithTag("oScene0").GetComponent<JTSScene0>().tileSize;
 		GameObject pObj_;
 		float offsetXZ = 0.2f;
 		
 		for ( uint i = 0; i < t_arraySize; i++ ){
 			
 			
-			pObj_ = GameObject.FindWithTag("oScene0").GetComponent<scene_0>().tileArray[ i ];
+			//pObj_ = GameObject.FindWithTag("Scripts/UserScripts/JTS/JTSScene0").GetComponent<JTSScene0>().tileArray[ i ];
+			pObj_ = GameObject.FindWithTag("oScene0").GetComponent<JTSScene0>().tileArray[ i ];
 			Color colourDestination = Color.white;
 			pObj_.renderer.material.color = colourDestination;
 			
@@ -146,10 +148,12 @@ public class player_movement : MonoBehaviour {
 	void setTileColour( uint index_ ){
 		
 		uint t_arraySize;
-		t_arraySize = GameObject.FindWithTag("oScene0").GetComponent<scene_0>().tileSize;
+		//t_arraySize = GameObject.FindWithTag("Scripts/UserScripts/JTS/JTSScene0").GetComponent<JTSScene0>().tileSize;
+		t_arraySize = GameObject.FindWithTag("oScene0").GetComponent<JTSScene0>().tileSize;
 	
 		GameObject pObj_ , pPlayerTile_;
-		pPlayerTile_ = GameObject.FindWithTag("oScene0").GetComponent<scene_0>().tileArray[ index_ ];
+		//pPlayerTile_ = GameObject.FindWithTag("Scripts/UserScripts/JTS/JTSScene0").GetComponent<JTSScene0>().tileArray[ index_ ];
+		pPlayerTile_ = GameObject.FindWithTag("oScene0").GetComponent<JTSScene0>().tileArray[ index_ ];
 		
 		Color colourDestination = Color.red;
 		
@@ -167,7 +171,8 @@ public class player_movement : MonoBehaviour {
 				//left
 				highlightIndex = index_ - 5;
 				if ( highlightIndex >= 0 && highlightIndex < t_arraySize ){
-					pObj_ = GameObject.FindWithTag("oScene0").GetComponent<scene_0>().tileArray[ highlightIndex ];
+					//pObj_ = GameObject.FindWithTag("Scripts/UserScripts/JTS/JTSScene0").GetComponent<JTSScene0>().tileArray[ highlightIndex ];
+					pObj_ = GameObject.FindWithTag("oScene0").GetComponent<JTSScene0>().tileArray[ highlightIndex ];
 					debug_distance = distancePoints( pPlayerTile_.transform.position.x , pPlayerTile_.transform.position.z , pObj_.transform.position.x , pObj_.transform.position.z );
 					if ( debug_distance < offsetXZ ){
 						pObj_.renderer.material.color = colourDestination;
@@ -177,7 +182,8 @@ public class player_movement : MonoBehaviour {
 				//right
 				highlightIndex = index_ + 5;
 				if ( highlightIndex >= 0 && highlightIndex < t_arraySize ){
-					pObj_ = GameObject.FindWithTag("oScene0").GetComponent<scene_0>().tileArray[ highlightIndex ];
+					//pObj_ = GameObject.FindWithTag("Scripts/UserScripts/JTS/JTSScene0").GetComponent<JTSScene0>().tileArray[ highlightIndex ];
+					pObj_ = GameObject.FindWithTag("oScene0").GetComponent<JTSScene0>().tileArray[ highlightIndex ];
 					debug_distance = distancePoints( pPlayerTile_.transform.position.x , pPlayerTile_.transform.position.z , pObj_.transform.position.x , pObj_.transform.position.z );
 					if ( debug_distance < offsetXZ ){
 						pObj_.renderer.material.color = colourDestination;
@@ -187,7 +193,8 @@ public class player_movement : MonoBehaviour {
 				//up
 				highlightIndex = index_ + 1;
 				if ( highlightIndex >= 0 && highlightIndex < t_arraySize ){
-					pObj_ = GameObject.FindWithTag("oScene0").GetComponent<scene_0>().tileArray[ highlightIndex ];
+					//pObj_ = GameObject.FindWithTag("Scripts/UserScripts/JTS/JTSScene0").GetComponent<JTSScene0>().tileArray[ highlightIndex ];
+					pObj_ = GameObject.FindWithTag("oScene0").GetComponent<JTSScene0>().tileArray[ highlightIndex ];
 					debug_distance = distancePoints( pPlayerTile_.transform.position.x , pPlayerTile_.transform.position.z , pObj_.transform.position.x , pObj_.transform.position.z );
 					if ( debug_distance < offsetXZ ){
 						pObj_.renderer.material.color = colourDestination;
@@ -197,7 +204,8 @@ public class player_movement : MonoBehaviour {
 				//down
 				highlightIndex = index_ - 1;
 				if ( highlightIndex >= 0 && highlightIndex < t_arraySize ){
-					pObj_ = GameObject.FindWithTag("oScene0").GetComponent<scene_0>().tileArray[ highlightIndex ];
+					//pObj_ = GameObject.FindWithTag("Scripts/UserScripts/JTS/JTSScene0").GetComponent<JTSScene0>().tileArray[ highlightIndex ];
+					pObj_ = GameObject.FindWithTag("oScene0").GetComponent<JTSScene0>().tileArray[ highlightIndex ];
 					debug_distance = distancePoints( pPlayerTile_.transform.position.x , pPlayerTile_.transform.position.z , pObj_.transform.position.x , pObj_.transform.position.z );
 					if ( debug_distance < offsetXZ ){
 						pObj_.renderer.material.color = colourDestination;
@@ -205,12 +213,8 @@ public class player_movement : MonoBehaviour {
 				}
 			
 			break;
-		}
-			
-
+		}			
 		
-	}
-	
-	
+	}	
 	
 }

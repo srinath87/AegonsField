@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class scene_0 : MonoBehaviour {
+public class JTSScene0 : MonoBehaviour {
 	
 	
 	
@@ -49,7 +49,7 @@ public class scene_0 : MonoBehaviour {
 		//Make tiles.
 		for (int i = 0; i < 10; i = i + 1){
 			for ( int j = 0; j < 5; j = j + 1 ){
-				GameObject ins = ( GameObject )Instantiate( Resources.Load( "oTile" ) );
+				GameObject ins = ( GameObject )Instantiate( Resources.Load( "Levels/TestLevels/JasTestScene/JTS_Tile" ) );
 				ins.transform.position = new Vector3( 10.0f + 1.0f * i , 0.0f , 8.0f + 1.0f * j );
 				Color colorStart = Color.white;
 				ins.renderer.material.color = colorStart;//Color.Lerp(colorStart, colorEnd, lerp);
@@ -72,7 +72,7 @@ public class scene_0 : MonoBehaviour {
 		//Make player.
 		for (int i = 0; i < 1; i = i + 1){
 			for ( int j = 0; j < 1; j = j + 1 ){
-				GameObject ins = ( GameObject )Instantiate( Resources.Load( "oPlayer" ) );
+				GameObject ins = ( GameObject )Instantiate( Resources.Load( "Levels/TestLevels/JasTestScene/JTS_Player" ) );
 				ins.transform.position = new Vector3( 11.0f + 1.0f * i , 1.0f , 11.0f + 1.0f * j );
 				playerArray[ playerIndex ] = ins;	
 				playerIndex++;
