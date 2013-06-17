@@ -15,4 +15,20 @@ public class SriScript : MonoBehaviour {
 	
 	}
 
+
+	//blahdeblahdeblah
+	de blah( blah_:uint , blah_:float :blah:vlah:Dlds;lghf;;l )
+
+	{
+		{
+			{
+				{
+					{
+						for i = 1, 99999999999999, ......
+					}
+				}
+			}
+		}
+	}
+
 }
