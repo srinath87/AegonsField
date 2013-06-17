@@ -21,7 +21,7 @@ public class SriScript : MonoBehaviour {
 	}
 
 	//blahdeblahdeblah
-	de blah( blah_:uint , blah_:float :blah:vlah:Dlds;lghf;;l )
+	/*de blah( blah_:uint , blah_:float :blah:vlah:Dlds;lghf;;l )
 
 	{
 		{
@@ -34,5 +34,5 @@ public class SriScript : MonoBehaviour {
 			}
 		}
 	}
-
+	 */
 }
