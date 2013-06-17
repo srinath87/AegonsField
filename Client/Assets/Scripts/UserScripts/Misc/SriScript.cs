@@ -14,9 +14,5 @@ public class SriScript : MonoBehaviour {
 	{
 	
 	}
-	
-	void sriFunc()
-	{
-		// Sri is Kewl ;)	
-	}
+
 }
