@@ -28,12 +28,12 @@ public class UnitController : MonoBehaviour {
 		
 
 		
-		if (Input.GetMouseButtonDown(0)){
-			int layerMask = ~(1 << 8);
+		if ( Input.GetMouseButtonDown( 0 ) ){
+			int layerMask = ~( 1 << 8 );
 			Debug.Log ( layerMask );
 		    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		    RaycastHit hit = new RaycastHit();
-		    if (Physics.Raycast (ray, out hit , Mathf.Infinity , layerMask ))
+		    if ( Physics.Raycast ( ray , out hit , Mathf.Infinity , layerMask ) )
 		    {
 		        Debug.DrawLine (ray.origin, hit.point);
 				Debug.Log( hit.point );
@@ -82,15 +82,18 @@ public class UnitController : MonoBehaviour {
 				
 				//Lazy i know!, if only equal to red.
 				if ( pObj_.renderer.material.color.g == 0 ){
-					transform.position = new Vector3( pObj_.transform.position.x , 1.0f , pObj_.transform.position.z );
+					float t_y;
+					t_y = pObj_.transform.position.y;
+					
+					transform.position = new Vector3( pObj_.transform.position.x , t_y , pObj_.transform.position.z );
 				}
 				t_return = i;
 				Debug.Log ( pObj_.renderer.material.color.g + " " + t_return );
 			}
 			
 			
-			Color colourDestination = Color.white;
-			pObj_.renderer.material.color = colourDestination;
+			//Color colourDestination = Color.white;
+			pObj_.renderer.material.color = new Color( 1.0f , 1.0f , 1.0f , 1.0f );//colourDestination;
 			
 		}
 		
@@ -114,8 +117,8 @@ public class UnitController : MonoBehaviour {
 			
 			//pObj_ = GameObject.FindWithTag("Scripts/UserScripts/JTS/JTSScene0").GetComponent<JTSScene0>().tileArray[ i ];
 			pObj_ = GameObject.FindWithTag("oScene0").GetComponent<JTSScene0>().tileArray[ i ];
-			Color colourDestination = Color.white;
-			pObj_.renderer.material.color = colourDestination;
+			//Color colourDestination = Color.white;
+			pObj_.renderer.material.color = new Color( 1.0f , 1.0f , 1.0f , 0.0f );//colourDestination;
 			
 			if (
 				transform.position.x > pObj_.transform.position.x - offsetXZ &&

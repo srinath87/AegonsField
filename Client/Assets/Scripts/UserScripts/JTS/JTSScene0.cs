@@ -49,8 +49,9 @@ public class JTSScene0 : MonoBehaviour {
 			for ( int j = 0; j < 5; j = j + 1 ){
 				GameObject ins = ( GameObject )Instantiate( Resources.Load( "Levels/TestLevels/JasTestScene/JTS_Tile" ) );
 				ins.transform.position = new Vector3( 10.0f + 1.0f * i , 0.0f , 8.0f + 1.0f * j );
-				Color colorStart = Color.white;
-				ins.renderer.material.color = colorStart;//Color.Lerp(colorStart, colorEnd, lerp);
+				//Color colorStart = Color.white;
+				//ins.renderer.material.color = colorStart;
+				//ins.setTransparency( 0.0f );
 				tileArray[ tileIndex ] = ins;	
 				tileIndex++;
 			}
@@ -71,7 +72,7 @@ public class JTSScene0 : MonoBehaviour {
 		for (int i = 0; i < 1; i = i + 1){
 			for ( int j = 0; j < 1; j = j + 1 ){
 				GameObject ins = ( GameObject )Instantiate( Resources.Load( "Levels/TestLevels/JasTestScene/JTS_Player" ) );
-				ins.transform.position = new Vector3( 11.0f + 1.0f * i , 1.0f , 11.0f + 1.0f * j );
+				ins.transform.position = new Vector3( 11.0f + 1.0f * i , 0.5f , 11.0f + 1.0f * j );
 				playerArray[ playerIndex ] = ins;	
 				playerIndex++;
 			}
