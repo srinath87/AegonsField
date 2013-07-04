@@ -6,19 +6,32 @@ public class ClientConnect : MonoBehaviour {
 	public string connectToIP = "127.0.0.1";
 	public int connectPort = 25001;
 	public int numberOfConnections = 32;
+	public bool serverConnected = false;
+	
 	// Use this for initialization
-	void Start () {
-		Debug.Log("1");
+	void Start () 
+	{
 		Network.Connect(connectToIP, connectPort);
-		Debug.Log("2");
+		serverConnected = true;
 	}
 	
 	// Update is called once per frame
-	void Update () {
-	
+	void Update () 
+	{
+		if(!serverConnected)
+		{
+			Network.Connect(connectToIP, connectPort);
+			serverConnected = true;
+		}
 	}
 	
-	void OnConnectedToServer() {
+	void OnConnectedToServer() 
+	{
 		Debug.Log("This CLIENT has connected to a server");	
+	}
+	
+	void OnFailedToConnect(NetworkConnectionError error)
+	{
+		serverConnected = false;
 	}
 }
