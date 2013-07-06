@@ -7,6 +7,7 @@ public class ClientConnect : MonoBehaviour {
 	public int connectPort = 25001;
 	public int numberOfConnections = 32;
 	public bool serverConnected = false;
+	private int test = 0;
 	
 	// Use this for initialization
 	void Start () 
@@ -27,11 +28,26 @@ public class ClientConnect : MonoBehaviour {
 	
 	void OnConnectedToServer() 
 	{
-		Debug.Log("This CLIENT has connected to a server");	
+		Debug.Log("This CLIENT has connected to a server");
+		//networkView.RPC ("SubmitTurn", RPCMode.Server);
 	}
 	
 	void OnFailedToConnect(NetworkConnectionError error)
 	{
 		serverConnected = false;
 	}
+	
+	[RPC]
+	void SubmitTurn()
+	{
+		test = 1;
+		Debug.Log("Test = " + test);
+	}
+	
+	/*
+	[RPC]
+	void ReceivePendingMessages(string playerName, PendingMessages* msgs)
+	{
+	}
+	*/
 }
