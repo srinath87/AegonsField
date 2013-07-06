@@ -18,7 +18,7 @@ public class ServerConnect : MonoBehaviour {
 	{
 		//Connect to server
 		_myUsername = _username;
-		Network.Connect(_ip, _port, _username, "afunity1");
+		Network.Connect(_ip, _port);
 	}
 	
 	private void OnConnectedToServer()
@@ -34,4 +34,17 @@ public class ServerConnect : MonoBehaviour {
 		//We received message, print it
 		Debug.Log(_message);	
 	}
+	
+	[RPC]
+	protected void UpdatePlayerList(string _name, NetworkMessageInfo _info)
+	{
+		
+	}
+	
+	[RPC]
+	protected void SendGameMessage(string _recName, string _message)
+	{
+		
+	}
+
 }
