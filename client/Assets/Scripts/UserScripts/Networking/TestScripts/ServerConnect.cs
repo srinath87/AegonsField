@@ -5,8 +5,10 @@ public class ServerConnect : MonoBehaviour {
 	
 	private string _myUsername;
 	// Use this for initialization
-	void Start () {
+	void Start () 
+	{
 		Application.runInBackground = true;
+		print("Test");
 	}
 	
 	// Update is called once per frame
@@ -18,13 +20,14 @@ public class ServerConnect : MonoBehaviour {
 	{
 		//Connect to server
 		_myUsername = _username;
-		Network.Connect(_ip, _port);
-	}
+		uLink.Network.Connect(_ip, _port, _myUsername);
+	} 
 	
-	private void OnConnectedToServer()
+	void uLink_OnConnectedToServer()
 	{
 		//Connected, send details to player
-		GetComponent<NetworkView>().RPC("UpdatePlayerList", RPCMode.Server, _myUsername);
+		Debug.Log("Connected to Server");
+		GetComponent<uLink.NetworkView>().RPC("UpdatePlayerList", uLink.RPCMode.Server, _myUsername);
 		gameObject.AddComponent<SendMessage>();
 	}
 	
@@ -33,18 +36,6 @@ public class ServerConnect : MonoBehaviour {
 	{
 		//We received message, print it
 		Debug.Log(_message);	
-	}
-	
-	[RPC]
-	protected void UpdatePlayerList(string _name, NetworkMessageInfo _info)
-	{
-		
-	}
-	
-	[RPC]
-	protected void SendGameMessage(string _recName, string _message)
-	{
-		
 	}
 
 }

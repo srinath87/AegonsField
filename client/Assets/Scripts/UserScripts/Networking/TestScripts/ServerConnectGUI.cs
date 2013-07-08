@@ -34,9 +34,10 @@ public class ServerConnectGUI : MonoBehaviour {
 		}
 	}
 	
-	void OnConnectedToServer()
+	void uLink_OnConnectedToServer()
 	{
 		//Connected, destroy the GUI
 		Destroy(this);
+		print("Tests");
 	}
 }

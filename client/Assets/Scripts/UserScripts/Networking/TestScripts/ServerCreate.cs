@@ -4,14 +4,14 @@ using System.Collections.Generic;
 
 public class ServerCreate : MonoBehaviour {
 	
-	//This list is the list of online players
-	public List<PlayerType> PlayerList;
 	[System.Serializable]
 	public class PlayerType
 	{
 		public string Username;
-		public NetworkPlayer Player;
+		public uLink.NetworkPlayer Player;
 	}
+	//This list is the list of online players
+	public List<PlayerType> PlayerList;
 	// Use this for initialization
 	void Start () {
 		Application.runInBackground = true;
@@ -26,15 +26,15 @@ public class ServerCreate : MonoBehaviour {
 	public void StartServer(int _maxConnections, int _port)
 	{
 		//Create the server
-		Network.InitializeServer(_maxConnections, _port);
+		uLink.Network.InitializeServer(_maxConnections, _port);
 	}
 	
-	private void OnPlayerConnected(NetworkPlayer _player)
+	private void uLink_OnPlayerConnected(uLink.NetworkPlayer _player)
 	{
 		Debug.Log("Player Connected");
 	}
 	
-	private void OnPlayerDisconnected(NetworkPlayer _player)
+	private void uLink_OnPlayerDisconnected(uLink.NetworkPlayer _player)
 	{
 		//Remove player from online list
 		PlayerType _playerToRemove = new PlayerType();
@@ -50,7 +50,7 @@ public class ServerCreate : MonoBehaviour {
 	}
 	
 	[RPC]
-	protected void UpdatePlayerList(string _name, NetworkMessageInfo _info)
+	protected void UpdatePlayerList(string _name, uLink.NetworkMessageInfo _info)
 	{
 		//Add new player to online list
 		PlayerType _newEntry = new PlayerType();
@@ -68,7 +68,8 @@ public class ServerCreate : MonoBehaviour {
 		{
 			if (_onlinePlayer.Username == _recName)
 			{
-				GetComponent<NetworkView>().RPC("ReceiveGameMessage", _onlinePlayer.Player, _message);
+				GetComponent<uLink.NetworkView>().RPC("ReceiveGameMessage", _onlinePlayer.Player, _message);
+				Debug.Log(_message);
 			}
 		}
 	}
