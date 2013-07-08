@@ -82,10 +82,10 @@ public class UnitController : MonoBehaviour {
 				
 				//Lazy i know!, if only equal to red.
 				if ( pObj_.renderer.material.color.g == 0 ){
-					float t_y;
-					t_y = pObj_.transform.position.y;
+					//float t_y;
+					//t_y = pObj_.transform.position.y;
 					
-					transform.position = new Vector3( pObj_.transform.position.x , t_y , pObj_.transform.position.z );
+					transform.position = new Vector3( pObj_.transform.position.x , transform.position.y , pObj_.transform.position.z );
 				}
 				t_return = i;
 				Debug.Log ( pObj_.renderer.material.color.g + " " + t_return );

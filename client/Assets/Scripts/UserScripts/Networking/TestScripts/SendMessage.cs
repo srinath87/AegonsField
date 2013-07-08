@@ -25,7 +25,7 @@ public class SendMessage : MonoBehaviour {
 		if (GUI.Button(new Rect(Screen.width/2-50, 320, 100, 50), "Send Message"))
 		{
 			//Send message to the server for further relay
-			GetComponent<NetworkView>().RPC("SendGameMessage", RPCMode.Server, _receiverUsername, _message);
+			GetComponent<uLink.NetworkView>().RPC("SendGameMessage", uLink.RPCMode.Server, _receiverUsername, _message);
 		}
 	}
 }
