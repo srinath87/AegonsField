@@ -6,6 +6,26 @@ public class UnitController : MonoBehaviour {
 	public Vector3 rayHitPoint;
 	public uint onTileIndex;
 	
+	public string unitType = "Melee";
+	public bool isSelected = false;
+	public uint attackRange = 0;
+	public uint damage = 0;
+	public uint meleeArmour = 0;
+	public uint rangedArmour = 0;
+	public uint moveRangeLR = 0;
+	public uint moveRangeUD = 0;
+	public uint moveRangeDiag = 0;
+	public int HitPoints = 10;
+	
+	private enum UnitState { NONE , CREATED , IDLE , MOVING , ATTACKING , TAKEHIT , DIEING , DEAD };
+	UnitState currentState = UnitState.NONE;
+	UnitState previousState = UnitState.NONE;
+	
+	private string unitOwner = "none";
+	private int unitID = -1;
+	private Vector3 targetDestination = new Vector3( -1.0f , -1.0f , -1.0f );
+	
+	
 	// Use this for initialization
 	void Start () {
 		rayHitPoint = new Vector3( 0.0f , 0.0f , 0.0f );
@@ -16,11 +36,24 @@ public class UnitController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		RaycastToTerrain();
-		touch();
+		
+		OnTap();
+		
+
 		onTileIndex = getTileIndexAtPlayer();
 
 	}
+	
+	void OnTap()
+	{
+		
+		RaycastToTerrain(); //Windows
+		touch(); //Mobile device
+		
+		
+		
+	}
+	
 
 	void RaycastToTerrain()
 	{
@@ -93,7 +126,7 @@ public class UnitController : MonoBehaviour {
 			
 			
 			//Color colourDestination = Color.white;
-			pObj_.renderer.material.color = new Color( 1.0f , 1.0f , 1.0f , 1.0f );//colourDestination;
+			pObj_.renderer.material.color = new Color( 0.0f , 0.0f , 0.0f , 0.0f );//colourDestination;
 			
 		}
 		
@@ -118,7 +151,7 @@ public class UnitController : MonoBehaviour {
 			//pObj_ = GameObject.FindWithTag("Scripts/UserScripts/JTS/JTSScene0").GetComponent<JTSScene0>().tileArray[ i ];
 			pObj_ = GameObject.FindWithTag("oScene0").GetComponent<JTSScene0>().tileArray[ i ];
 			//Color colourDestination = Color.white;
-			pObj_.renderer.material.color = new Color( 1.0f , 1.0f , 1.0f , 0.0f );//colourDestination;
+			pObj_.renderer.material.color = new Color( 0.0f , 0.00f , 0.0f , 0.0f );//colourDestination;
 			
 			if (
 				transform.position.x > pObj_.transform.position.x - offsetXZ &&
@@ -150,6 +183,53 @@ public class UnitController : MonoBehaviour {
 		return Mathf.Sqrt( ( ( u1 - v1 ) * ( u1 - v1 ) ) + ( ( u2 - v2 ) * ( u2 - v2 ) ) );
 	}
 	
+	
+	
+		
+	public void HighlightMovementRange()
+	{
+	// Go through all the 3 movement ranges and highlight the squares using 				// TileController.HighlightTile(color). Make it green or blue instead of red. We can use red 	// for attack range.
+	
+	}
+	
+	public void HighlightAttackRange()
+	{
+	// Go through the attack range, and if any units are standing on the blocks within that 	// range and their unitOwner is not same as the selected unit's unitOwner, then 	
+	// highlight that square red.
+	// Same as before, use TileController.HighlightTile(color)
+	}
+	
+
+	
+		
+	
+	public void SetState( UnitState newState )
+	{
+		previousState = currentState;
+		currentState = newState;
+	}
+	
+	public void TakeDamage( uint damage_ , string unitType_ )
+	{
+		HitPoints -= ( damage_ - Armour ); // Armour is respective to the type of attack.
+		if ( HitPoints <= 0 )
+		{
+			SetState( DIEING );
+		}
+	}	
+	
+	public void SetTargetDestination( Vector3 newDestination )
+	{
+		targetDestination = newDestination;
+	}
+
+	
+	
+	
+	
+	
+	
+	
 	void setTileColour( uint index_ ){
 		
 		uint t_arraySize;
@@ -160,7 +240,10 @@ public class UnitController : MonoBehaviour {
 		//pPlayerTile_ = GameObject.FindWithTag("Scripts/UserScripts/JTS/JTSScene0").GetComponent<JTSScene0>().tileArray[ index_ ];
 		pPlayerTile_ = GameObject.FindWithTag("oScene0").GetComponent<JTSScene0>().tileArray[ index_ ];
 		
-		Color colourDestination = Color.red;
+		//Color colourDestination = Color.red;
+		
+		
+		
 		
 		
 		//if player.type = blah, do this, or do that... { ?different loop? }
@@ -180,7 +263,9 @@ public class UnitController : MonoBehaviour {
 					pObj_ = GameObject.FindWithTag("oScene0").GetComponent<JTSScene0>().tileArray[ highlightIndex ];
 					debug_distance = distancePoints( pPlayerTile_.transform.position.x , pPlayerTile_.transform.position.z , pObj_.transform.position.x , pObj_.transform.position.z );
 					if ( debug_distance < offsetXZ ){
-						pObj_.renderer.material.color = colourDestination;
+						//pObj_.renderer.material.color = colourDestination;
+						TileController t_tile = ( TileController )pObj_.GetComponent( typeof( TileController ) );
+						t_tile.HighlightTile( "red" );
 					}
 				}
 			
@@ -191,7 +276,9 @@ public class UnitController : MonoBehaviour {
 					pObj_ = GameObject.FindWithTag("oScene0").GetComponent<JTSScene0>().tileArray[ highlightIndex ];
 					debug_distance = distancePoints( pPlayerTile_.transform.position.x , pPlayerTile_.transform.position.z , pObj_.transform.position.x , pObj_.transform.position.z );
 					if ( debug_distance < offsetXZ ){
-						pObj_.renderer.material.color = colourDestination;
+						//pObj_.renderer.material.color = colourDestination;
+						TileController t_tile = ( TileController )pObj_.GetComponent( typeof( TileController ) );
+						t_tile.HighlightTile( "red" );
 					}
 				}
 			
@@ -202,7 +289,9 @@ public class UnitController : MonoBehaviour {
 					pObj_ = GameObject.FindWithTag("oScene0").GetComponent<JTSScene0>().tileArray[ highlightIndex ];
 					debug_distance = distancePoints( pPlayerTile_.transform.position.x , pPlayerTile_.transform.position.z , pObj_.transform.position.x , pObj_.transform.position.z );
 					if ( debug_distance < offsetXZ ){
-						pObj_.renderer.material.color = colourDestination;
+						//pObj_.renderer.material.color = colourDestination;
+						TileController t_tile = ( TileController )pObj_.GetComponent( typeof( TileController ) );
+						t_tile.HighlightTile( "red" );
 					}
 				}
 			
@@ -213,7 +302,9 @@ public class UnitController : MonoBehaviour {
 					pObj_ = GameObject.FindWithTag("oScene0").GetComponent<JTSScene0>().tileArray[ highlightIndex ];
 					debug_distance = distancePoints( pPlayerTile_.transform.position.x , pPlayerTile_.transform.position.z , pObj_.transform.position.x , pObj_.transform.position.z );
 					if ( debug_distance < offsetXZ ){
-						pObj_.renderer.material.color = colourDestination;
+						//pObj_.renderer.material.color = colourDestination;
+						TileController t_tile = ( TileController )pObj_.GetComponent( typeof( TileController ) );
+						t_tile.HighlightTile( "red" );
 					}
 				}
 			
