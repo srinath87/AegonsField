@@ -17,9 +17,10 @@ public class UnitController : MonoBehaviour {
 	public uint moveRangeDiag = 0;
 	public int HitPoints = 10;
 	
-	private enum UnitState { NONE , CREATED , IDLE , MOVING , ATTACKING , TAKEHIT , DIEING , DEAD };
-	UnitState currentState = UnitState.NONE;
-	UnitState previousState = UnitState.NONE;
+	public enum UnitState { NONE , CREATED , IDLE , MOVING , ATTACKING , TAKEHIT , DIEING , DEAD };
+	
+	private UnitState currentState = UnitState.NONE;
+	private UnitState previousState = UnitState.NONE;
 	
 	private string unitOwner = "none";
 	private int unitID = -1;
@@ -211,10 +212,10 @@ public class UnitController : MonoBehaviour {
 	
 	public void TakeDamage( uint damage_ , string unitType_ )
 	{
-		HitPoints -= ( damage_ - Armour ); // Armour is respective to the type of attack.
+		//HitPoints -= ( damage_ - Armour ); // Armour is respective to the type of attack.
 		if ( HitPoints <= 0 )
 		{
-			SetState( DIEING );
+			SetState( UnitState.DIEING );
 		}
 	}	
 	
