@@ -5,6 +5,10 @@ public class GameManager : MonoBehaviour {
 	
 	private static GameManager instance;
 	
+	private List<GameObject> matchList = new List<GameObject>();
+		
+	public GameObject match;
+	
 	public static GameManager Instance
 	{
 		get
@@ -43,8 +47,11 @@ public class GameManager : MonoBehaviour {
 		instance = null;
 	}
 	
-	public void TestFunction()
+	[RPC]
+	public void CreateMatch(int mId, string playerName, string opponentName, bool facingRight)
 	{
-		Debug.Log("TestPassed");
+		GameObject newMatch = (GameObject)GameObject.Instantiate((Object)match);
+		newMatch.GetComponent<Match>().Init(mId, playerName, opponentName, facingRight);
+		matchList.Add(newMatch);
 	}
 }
