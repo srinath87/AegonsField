@@ -6,9 +6,11 @@ public class TileController : MonoBehaviour {
 	
 	public bool isHighlighted;
 	public bool isOccupied;
+	public MatchController controller;
 	
 	// Use this for initialization
-	void Start () {
+	void Start () 
+	{
 		isHighlighted = false;
 		isOccupied = false;
 	}
@@ -36,31 +38,22 @@ public class TileController : MonoBehaviour {
 	{
 		renderer.material.color = new Color( 1.0f , 1.0f , 1.0f , 1.0f );
 		isHighlighted = false;	
-	}
-		
+	}		
 	
 	
 	public void OnTap()
 	{
-		
 		if ( isHighlighted )	
 		{
-						
-			//MatchController.PerformMoveAction(MatchController.playerName, 	
-			//MatchController.selectedUnit.UnitID, 	myLocation,)
-			// Loop through all the highlighted tiles and call UnHighlightTile() on them.
-
-			
+			controller.PerformMoveAction(controller.GetPlayerName(), controller.GetSelectedUnit().GetComponent<UnitController>().GetUnitId(), gameObject.transform.position);
 		}
-		
 	}
 	
 	
 	// Update is called once per frame
-	void Update () {
+	void Update () 
+	{
 	
 	}
-	
-	
 	
 }

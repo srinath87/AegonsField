@@ -17,7 +17,7 @@ public class UnitController : MonoBehaviour {
 	public uint moveRangeDiag = 0;
 	public int HitPoints = 10;
 	
-	public enum UnitState { NONE , CREATED , IDLE , MOVING , ATTACKING , TAKEHIT , DIEING , DEAD };
+	public enum UnitState { NONE = 0  , CREATED = 1 , IDLE = 2 , MOVING = 3 , ATTACKING = 4 , TAKEHIT = 5 , DIEING = 6 , DEAD = 7 };
 	
 	private UnitState currentState = UnitState.NONE;
 	private UnitState previousState = UnitState.NONE;
@@ -51,16 +51,15 @@ public class UnitController : MonoBehaviour {
 		RaycastToTerrain(); //Windows
 		touch(); //Mobile device
 		
-		
-		
 	}
 	
+	public int GetUnitId()
+	{
+		return unitID;
+	}
 
 	void RaycastToTerrain()
 	{
-		
-		
-
 		
 		if ( Input.GetMouseButtonDown( 0 ) ){
 			int layerMask = ~( 1 << 8 );
@@ -204,10 +203,10 @@ public class UnitController : MonoBehaviour {
 	
 		
 	
-	public void SetState( UnitState newState )
+	public void SetState( int newState )
 	{
 		previousState = currentState;
-		currentState = newState;
+		currentState = (UnitState)newState;
 	}
 	
 	public void TakeDamage( uint damage_ , string unitType_ )
@@ -215,7 +214,7 @@ public class UnitController : MonoBehaviour {
 		//HitPoints -= ( damage_ - Armour ); // Armour is respective to the type of attack.
 		if ( HitPoints <= 0 )
 		{
-			SetState( UnitState.DIEING );
+			SetState( 6 );
 		}
 	}	
 	
