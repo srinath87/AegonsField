@@ -1,19 +1,49 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using AssemblyCSharp;
 
 public class MatchController : MonoBehaviour {
 	
-	private int matchID = -1;
-	private string opponentName = "";
-	private string playerName = "";
-	private GameObject selectedUnit = null;
-	private int actionsLeft = 0;
-	private bool isMyTurn = false;
-	private enum ActionType { MOVE , ATTACK , POWER };
+	private int matchID;
+	private string playerName;
+	private string playerTeam;
+	private string opponentName;
+	private string opponentTeam;
+	private GameObject selectedUnit;
+	private int actionsLeft;
+	private bool myTurn;
+	private bool facingRight;
+	private List<Action> actionsInTurn;
+	
 	
 	// Use this for initialization
 	void Start () 
 	{
+		matchID = -1;
+		opponentName = "";
+		playerName = "";
+		selectedUnit = null;
+		actionsLeft = 0;
+		myTurn = false;
+		actionsInTurn = new List<Action>();
+	}
+	
+	public void Init(int matchID, string playerName, string playerTeam, string opponentName, string opponentTeam, bool facingRight, bool myTurn)
+	{
+		this.matchID = matchID;
+		this.opponentName = opponentName;
+		this.opponentTeam = opponentTeam;
+		this.playerName = playerName;
+		this.playerTeam = playerTeam;
+		this.facingRight = facingRight;
+		
+		this.myTurn = myTurn;
+		if(this.myTurn)
+		{
+			actionsLeft = 5;
+			actionsInTurn.Clear();
+		}
 		
 	}
 	
@@ -43,13 +73,13 @@ public class MatchController : MonoBehaviour {
 	
 	public void PerformPendingActions()
 	{
-		if( isMyTurn )
+		if( myTurn )
 		{
 			return;
 		}
 		// Perform pending actions. 
 		// And set my turn.
-		isMyTurn = true;
+		myTurn = true;
 		actionsLeft = 5;
 	}
 		
@@ -77,17 +107,23 @@ public class MatchController : MonoBehaviour {
 	
 	private void RecordMoveAction( string owner , int unitId , Vector3 targetLocation )
 	{
+		Action newAction = new Action();
+		newAction.Init(1, unitId, targetLocation);
+		actionsInTurn.Add(newAction);
 		actionsLeft--;
 	}
 	
 	public void RecordAttackAction( string owner , int attackerId , int targetId )
 	{
+		Action newAction = new Action();
+		newAction.Init(2, attackerId, targetId);
+		actionsInTurn.Add(newAction);
 		actionsLeft--;
 	}
 	
 	public void Update()
 	{
-		if( isMyTurn && actionsLeft <= 0 )
+		if( myTurn && actionsLeft <= 0 )
 		{
 			
 		}

@@ -3,12 +3,10 @@ using System.Collections;
 
 public class ServerConnect : MonoBehaviour {
 	
-	private string _myUsername;
 	// Use this for initialization
 	void Start () 
 	{
 		Application.runInBackground = true;
-		print("Test");
 	}
 	
 	// Update is called once per frame
@@ -16,19 +14,21 @@ public class ServerConnect : MonoBehaviour {
 	
 	}
 	
-	public void ConnectToServer(string _ip, int _port, string _username)
+	public void ConnectToServer(string _ip, int _port)
 	{
-		//Connect to server
-		_myUsername = _username;
-		uLink.Network.Connect(_ip, _port, _myUsername);
+		uLink.Network.Connect(_ip, _port);
 	} 
 	
 	void uLink_OnConnectedToServer()
 	{
 		//Connected, send details to player
 		Debug.Log("Connected to Server");
-		GetComponent<uLink.NetworkView>().RPC("UpdatePlayerList", uLink.RPCMode.Server, _myUsername);
-		gameObject.AddComponent<SendMessage>();
+		//GetComponent<uLink.NetworkView>().RPC("UpdatePlayerList", uLink.RPCMode.Server, _myUsername);
+		//gameObject.AddComponent<SendMessage>();
+		
+		GameObject controller = GameObject.Find("GameController");
+		GameManager manager = controller.GetComponent<GameManager>();
+		manager.StartCoroutine("LoadScene", "LoginScene");
 	}
 	
 	[RPC]

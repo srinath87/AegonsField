@@ -30,7 +30,7 @@ public class ServerConnectGUI : MonoBehaviour {
 		if (GUI.Button(new Rect(Screen.width/2-50, 360, 100, 50), "Connect to Server"))
 		{
 			//Access main_ServerConnect to create server
-			GetComponent<ServerConnect>().ConnectToServer(_ip, _port, _username);
+			GetComponent<ServerConnect>().ConnectToServer(_ip, _port/*, _username*/);
 		}
 	}
 	

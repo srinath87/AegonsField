@@ -34,7 +34,6 @@ public class ServerCreateGUI : MonoBehaviour {
 	void uLink_OnServerInitialized()
 	{
 		//Connected, destroy GUI
-		Debug.Log("Connected to Server");
 		Destroy(this);	
 	}
 }
