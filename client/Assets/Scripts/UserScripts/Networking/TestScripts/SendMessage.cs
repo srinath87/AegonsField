@@ -28,4 +28,5 @@ public class SendMessage : MonoBehaviour {
 			GetComponent<uLink.NetworkView>().RPC("SendGameMessage", uLink.RPCMode.Server, _receiverUsername, _message);
 		}
 	}
+	
 }
