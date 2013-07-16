@@ -29,6 +29,12 @@ public class MatchController : MonoBehaviour {
 		actionsInTurn = new List<Action>();
 	}
 	
+	public void Update()
+	{
+		RaycastToMouseClick();
+		//TouchScreen();
+	}
+	
 	public void Init(int matchID, string playerName, string playerTeam, string opponentName, string opponentTeam, bool facingRight, bool myTurn)
 	{
 		this.matchID = matchID;
@@ -45,6 +51,48 @@ public class MatchController : MonoBehaviour {
 			actionsInTurn.Clear();
 		}
 		
+	}
+	
+	void RaycastToMouseClick()
+	{
+		if ( Input.GetMouseButtonDown( 0 ) )
+		{
+			int layerMask = ~( 1 << 8 );
+			//Debug.Log ( layerMask );
+			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+		    RaycastHit hit = new RaycastHit();
+		    if ( Physics.Raycast ( ray , out hit , Mathf.Infinity , layerMask ) )
+		    {
+		        Debug.DrawLine (ray.origin, hit.point);
+				Debug.Log( hit.point );
+				//getTileIndexAtTouch( hit.point );
+				hit.transform.gameObject.GetComponent<InputInterface>().Tapped();
+		    }
+		}
+	}
+	
+	void TouchScreen()
+	{
+        int fingerCount = 0;
+		int layerMask = ~( 1 << 8 );
+		Ray ray = Camera.main.ScreenPointToRay(new Vector3(Input.touches[0].position.x, Input.touches[0].position.y, 0f));
+		RaycastHit hit = new RaycastHit();
+        foreach (Touch touch in Input.touches) 
+		{
+            if (touch.phase != TouchPhase.Ended && touch.phase != TouchPhase.Canceled)
+			{
+				if ( Physics.Raycast ( ray , out hit , Mathf.Infinity , layerMask ) )
+			    {
+			        //Debug.DrawLine (ray.origin, hit.point);
+					//Debug.Log( hit.point );
+					//getTileIndexAtTouch( hit.point );
+					hit.transform.gameObject.GetComponent<InputInterface>().Tapped();
+			    }
+			}
+               // fingerCount++;
+        }
+       // if (fingerCount > 0)
+           // print("User has " + fingerCount + " finger(s) touching the screen");
 	}
 	
 	public void MoveUnit( int unitId , Vector3 targetLocation )
@@ -94,6 +142,10 @@ public class MatchController : MonoBehaviour {
 			actionsLeft--;
 		}
 	}
+	public void PerformMoveAction( Vector3 targetLocation )
+	{
+		PerformMoveAction(playerName, selectedUnit.GetComponent<UnitController>().GetUnitId(), targetLocation);
+	}
 	
 	public void PerformAttackAction( string owner , int attackerId , int targetId )
 	{
@@ -104,6 +156,11 @@ public class MatchController : MonoBehaviour {
 			//RecordAction( Enum actionType , string owner , int attackerId , int targetId , Vector3 targetLocation );
 			actionsLeft--;
 		}
+	}
+	
+	public void PerformAttackAction( int targetId )
+	{
+		PerformAttackAction(playerName, selectedUnit.GetComponent<UnitController>().GetUnitId(), targetId);
 	}
 	
 	private void RecordMoveAction( string owner , int unitId , Vector3 targetLocation )
@@ -122,14 +179,15 @@ public class MatchController : MonoBehaviour {
 		actionsLeft--;
 	}
 	
-	public void Update()
+	public void UnHighlightTiles()
 	{
-		if( myTurn && actionsLeft <= 0 )
+		GameObject[] tiles = GameObject.FindGameObjectsWithTag("Tiles");
+		foreach(GameObject tile in tiles)
 		{
-			
+			tile.GetComponent<TileController>().UnHighlightTile();
 		}
 	}
-	
+		
 	public void SetPlayerName(string name)
 	{
 		playerName = name;

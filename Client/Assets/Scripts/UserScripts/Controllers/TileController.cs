@@ -11,7 +11,9 @@ public class TileController : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
 	{
-		isHighlighted = false;
+		gameObject.AddComponent("InputInterface");
+		UnHighlightTile();
+		controller = GameObject.Find("MatchControllerObj").GetComponent<MatchController>();
 		isOccupied = false;
 	}
 	
@@ -43,17 +45,22 @@ public class TileController : MonoBehaviour {
 	
 	public void OnTap()
 	{
+		Debug.Log("Tile Tapped!");
 		if ( isHighlighted )	
 		{
-			controller.PerformMoveAction(controller.GetPlayerName(), controller.GetSelectedUnit().GetComponent<UnitController>().GetUnitId(), gameObject.transform.position);
+			controller.PerformMoveAction(gameObject.transform.position);
 		}
+		controller.UnHighlightTiles();
 	}
 	
 	
 	// Update is called once per frame
 	void Update () 
 	{
-	
+		if(controller == null)
+		{
+			controller = GameObject.Find("MatchControllerObj").GetComponent<MatchController>();
+		}
 	}
 	
 }
