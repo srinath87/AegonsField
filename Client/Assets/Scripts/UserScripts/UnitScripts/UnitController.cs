@@ -30,7 +30,7 @@ public class UnitController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		rayHitPoint = new Vector3( 0.0f , 0.0f , 0.0f );
-		onTileIndex = 999;//maybe scan tile array at start ?
+		onTileIndex = 0;//maybe scan tile array at start ?
 		renderer.material.color = new Color( 1 , 1 , 1 , 0.5f );
 		
 	}
@@ -133,8 +133,7 @@ public class UnitController : MonoBehaviour {
 		return t_return;
 		
 	}
-	
-	
+		
 	uint getTileIndexAtPlayer(){
 		
 		
@@ -228,87 +227,101 @@ public class UnitController : MonoBehaviour {
 	
 	
 	
-	
-	
-	void setTileColour( uint index_ ){
+	void highlightByIndex( uint index_ , float offset_ )
+	{
 		
 		uint t_arraySize;
-		//t_arraySize = GameObject.FindWithTag("Scripts/UserScripts/JTS/JTSScene0").GetComponent<JTSScene0>().tileSize;
 		t_arraySize = GameObject.FindWithTag("oScene0").GetComponent<JTSScene0>().tileSize;
 	
 		GameObject pObj_ , pPlayerTile_;
-		//pPlayerTile_ = GameObject.FindWithTag("Scripts/UserScripts/JTS/JTSScene0").GetComponent<JTSScene0>().tileArray[ index_ ];
-		pPlayerTile_ = GameObject.FindWithTag("oScene0").GetComponent<JTSScene0>().tileArray[ index_ ];
+		pPlayerTile_ = GameObject.FindWithTag("oScene0").GetComponent<JTSScene0>().tileArray[ onTileIndex ];
 		
-		//Color colourDestination = Color.red;
-		
-		
-		
-		
-		
-		//if player.type = blah, do this, or do that... { ?different loop? }
-		uint characterType = 0; //Maybe Enumeration?
-
-		uint highlightIndex = 999;
 		float debug_distance;
-		float offsetXZ = 2.0f;
+		uint highlightIndex;
+		
+		highlightIndex = index_;
+		if ( highlightIndex >= 0 && highlightIndex < t_arraySize )
+		{
+			pObj_ = GameObject.FindWithTag("oScene0").GetComponent<JTSScene0>().tileArray[ highlightIndex ];
+			debug_distance = distancePoints( pPlayerTile_.transform.position.x , pPlayerTile_.transform.position.z , pObj_.transform.position.x , pObj_.transform.position.z );
+			
+			if ( debug_distance < offset_ )
+			{
+				//pObj_.renderer.material.color = colourDestination;
+				TileController t_tile = ( TileController )pObj_.GetComponent( typeof( TileController ) );
+				t_tile.HighlightTile( "red" );
+			}
+		}
+		
+		
+		
+	}
+	
+	void setTileColour( uint index_ ){
+	
+
+		uint characterType = 2;
 		
 		switch( characterType ){
 			
 			case 0:
-				//left
-				highlightIndex = index_ - 5;
-				if ( highlightIndex >= 0 && highlightIndex < t_arraySize ){
-					//pObj_ = GameObject.FindWithTag("Scripts/UserScripts/JTS/JTSScene0").GetComponent<JTSScene0>().tileArray[ highlightIndex ];
-					pObj_ = GameObject.FindWithTag("oScene0").GetComponent<JTSScene0>().tileArray[ highlightIndex ];
-					debug_distance = distancePoints( pPlayerTile_.transform.position.x , pPlayerTile_.transform.position.z , pObj_.transform.position.x , pObj_.transform.position.z );
-					if ( debug_distance < offsetXZ ){
-						//pObj_.renderer.material.color = colourDestination;
-						TileController t_tile = ( TileController )pObj_.GetComponent( typeof( TileController ) );
-						t_tile.HighlightTile( "red" );
-					}
-				}
 			
-				//right
-				highlightIndex = index_ + 5;
-				if ( highlightIndex >= 0 && highlightIndex < t_arraySize ){
-					//pObj_ = GameObject.FindWithTag("Scripts/UserScripts/JTS/JTSScene0").GetComponent<JTSScene0>().tileArray[ highlightIndex ];
-					pObj_ = GameObject.FindWithTag("oScene0").GetComponent<JTSScene0>().tileArray[ highlightIndex ];
-					debug_distance = distancePoints( pPlayerTile_.transform.position.x , pPlayerTile_.transform.position.z , pObj_.transform.position.x , pObj_.transform.position.z );
-					if ( debug_distance < offsetXZ ){
-						//pObj_.renderer.material.color = colourDestination;
-						TileController t_tile = ( TileController )pObj_.GetComponent( typeof( TileController ) );
-						t_tile.HighlightTile( "red" );
-					}
-				}
-			
-				//up
-				highlightIndex = index_ + 1;
-				if ( highlightIndex >= 0 && highlightIndex < t_arraySize ){
-					//pObj_ = GameObject.FindWithTag("Scripts/UserScripts/JTS/JTSScene0").GetComponent<JTSScene0>().tileArray[ highlightIndex ];
-					pObj_ = GameObject.FindWithTag("oScene0").GetComponent<JTSScene0>().tileArray[ highlightIndex ];
-					debug_distance = distancePoints( pPlayerTile_.transform.position.x , pPlayerTile_.transform.position.z , pObj_.transform.position.x , pObj_.transform.position.z );
-					if ( debug_distance < offsetXZ ){
-						//pObj_.renderer.material.color = colourDestination;
-						TileController t_tile = ( TileController )pObj_.GetComponent( typeof( TileController ) );
-						t_tile.HighlightTile( "red" );
-					}
-				}
-			
-				//down
-				highlightIndex = index_ - 1;
-				if ( highlightIndex >= 0 && highlightIndex < t_arraySize ){
-					//pObj_ = GameObject.FindWithTag("Scripts/UserScripts/JTS/JTSScene0").GetComponent<JTSScene0>().tileArray[ highlightIndex ];
-					pObj_ = GameObject.FindWithTag("oScene0").GetComponent<JTSScene0>().tileArray[ highlightIndex ];
-					debug_distance = distancePoints( pPlayerTile_.transform.position.x , pPlayerTile_.transform.position.z , pObj_.transform.position.x , pObj_.transform.position.z );
-					if ( debug_distance < offsetXZ ){
-						//pObj_.renderer.material.color = colourDestination;
-						TileController t_tile = ( TileController )pObj_.GetComponent( typeof( TileController ) );
-						t_tile.HighlightTile( "red" );
-					}
-				}
+				highlightByIndex( index_ - 5 , 2.0f );
+				highlightByIndex( index_ + 5 , 2.0f );
+				highlightByIndex( index_ + 1 , 2.0f );
+				highlightByIndex( index_ - 1 , 2.0f );
 			
 			break;
+			
+			case 1:
+				
+				highlightByIndex( index_ - 5 , 2.0f );
+				highlightByIndex( index_ + 5 , 2.0f );
+				highlightByIndex( index_ + 1 , 2.0f );
+				highlightByIndex( index_ - 1 , 2.0f );
+			
+				highlightByIndex( index_ + 2 , 3.0f );
+				highlightByIndex( index_ - 2 , 3.0f );
+				highlightByIndex( index_ - 10 , 3.0f );
+				highlightByIndex( index_ + 10 , 3.0f );
+				highlightByIndex( index_ - 4 , 3.0f );
+				highlightByIndex( index_ + 6 , 3.0f );
+				highlightByIndex( index_ + 4 , 3.0f );
+				highlightByIndex( index_ - 6 , 3.0f );
+
+			
+			break;
+				
+			case 2:
+			
+
+			
+				highlightByIndex( index_ - 5 , 2.0f ); 
+				highlightByIndex( index_ + 5 , 2.0f );
+				highlightByIndex( index_ + 1 , 2.0f );
+				highlightByIndex( index_ - 1 , 2.0f );
+			
+				highlightByIndex( index_ + 2 , 3.0f );
+				highlightByIndex( index_ - 2 , 3.0f );
+				highlightByIndex( index_ - 10 , 3.0f );
+				highlightByIndex( index_ + 10 , 3.0f );
+				highlightByIndex( index_ - 4 , 3.0f );
+				highlightByIndex( index_ + 6 , 3.0f );
+				highlightByIndex( index_ + 4 , 3.0f );
+				highlightByIndex( index_ - 6 , 3.0f );
+			
+				highlightByIndex( index_ - 15 , 3.4f );
+				highlightByIndex( index_ - 11 , 3.4f );
+				highlightByIndex( index_ - 9 , 3.4f );
+				highlightByIndex( index_ - 7 , 3.4f );
+				highlightByIndex( index_ - 3 , 2.4f );
+				highlightByIndex( index_ + 3 , 2.4f );
+				highlightByIndex( index_ + 7 , 3.4f );
+				highlightByIndex( index_ + 9 , 3.4f );
+				highlightByIndex( index_ + 11 , 3.4f );
+				highlightByIndex( index_ + 15 , 3.4f );
+			break;			
+			
 		}			
 		
 	}	
