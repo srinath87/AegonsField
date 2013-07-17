@@ -103,13 +103,16 @@ public class UnitController : MonoBehaviour {
 	
 	void OnMouseDown()
 	{
-		//Debug.Log("Unit Tapped!");
+		if(currentState != UnitState.IDLE)
+		{
+			return;
+		}
+		
 		if(matchController != null)
 		{
 			matchController.UnHighlightTiles();
 			if(unitOwner.Equals(matchController.GetPlayerName()))
 			{
-				//Debug.Log("Unit Tapped 2!");
 				matchController.SetSelectedUnit(this.gameObject);
 				HighlightMovementRange();
 				HighlightAttackRange();
