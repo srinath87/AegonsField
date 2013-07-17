@@ -177,6 +177,10 @@ public class MatchController : MonoBehaviour {
 		{
 			tile.GetComponent<TileController>().UnHighlightTile();
 		}
+		if(selectedUnit != null)
+		{
+			selectedUnit = null;
+		}
 	}
 		
 	public void SetPlayerName(string name)

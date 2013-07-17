@@ -39,7 +39,10 @@ public class TileController : MonoBehaviour {
 		//Debug.Log("Tile Tapped!");
 		if ( isHighlighted )	
 		{
-			controller.PerformMoveAction(gameObject.transform.position);
+			if(controller.GetSelectedUnit() != null)
+			{
+				controller.PerformMoveAction(gameObject.transform.position);
+			}
 		}
 		controller.UnHighlightTiles();
 	}
