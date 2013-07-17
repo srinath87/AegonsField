@@ -22,7 +22,7 @@ public class UnitController : MonoBehaviour {
 	
 	public enum UnitState { NONE = 0  , CREATED = 1 , IDLE = 2 , MOVING = 3 , ATTACKING = 4 , TAKEHIT = 5 , DIEING = 6 , DEAD = 7 };
 	
-	private UnitState currentState = UnitState.NONE;
+	public UnitState currentState = UnitState.NONE;
 	private UnitState previousState = UnitState.NONE;
 	
 	public string unitOwner = "1";
@@ -49,6 +49,7 @@ public class UnitController : MonoBehaviour {
 		pObj_ = GameObject.FindWithTag("oScene0");
 		scene0Script = pObj_.GetComponent<JTSScene0>();
 		tilesArray = scene0Script.tileArray;
+		currentState = UnitState.CREATED;
 	}
 	
 	// Update is called once per frame
