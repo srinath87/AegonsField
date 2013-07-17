@@ -34,7 +34,7 @@ public class TileController : MonoBehaviour {
 	
 	public void OnMouseDown()
 	{
-		Debug.Log("Tile Tapped!");
+		//Debug.Log("Tile Tapped!");
 		if ( isHighlighted )	
 		{
 			controller.PerformMoveAction(gameObject.transform.position);
