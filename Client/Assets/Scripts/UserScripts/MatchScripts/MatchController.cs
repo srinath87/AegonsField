@@ -22,7 +22,7 @@ public class MatchController : MonoBehaviour {
 	{
 		matchID = -1;
 		opponentName = "";
-		playerName = "";
+		playerName = "1";
 		selectedUnit = null;
 		actionsLeft = 0;
 		myTurn = false;

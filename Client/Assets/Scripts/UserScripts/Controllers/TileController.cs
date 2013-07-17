@@ -6,6 +6,8 @@ public class TileController : MonoBehaviour {
 	
 	public bool isHighlighted;
 	public bool isOccupied;
+	public int row = 0;
+	public int column = 0;
 	public MatchController controller;
 	
 	// Use this for initialization

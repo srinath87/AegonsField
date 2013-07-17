@@ -49,6 +49,8 @@ public class JTSScene0 : MonoBehaviour {
 			for ( int j = 0; j < 5; j = j + 1 ){
 				GameObject ins = ( GameObject )Instantiate( Resources.Load( "Levels/TestLevels/JasTestScene/JTS_Tile" ) );
 				ins.transform.position = new Vector3( 10.0f + 1.0f * i , 0.0f , 8.0f + 1.0f * j );
+				ins.GetComponent<TileController>().column = i+1;
+				ins.GetComponent<TileController>().row = j+1;				
 				//Color colorStart = Color.white;
 				//ins.renderer.material.color = colorStart;
 				//ins.setTransparency( 0.0f );

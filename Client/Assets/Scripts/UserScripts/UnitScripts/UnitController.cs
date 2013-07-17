@@ -5,6 +5,7 @@ public class UnitController : MonoBehaviour {
 	
 	public Vector3 rayHitPoint;
 	public uint onTileIndex;
+	private GameObject onTileObj;
 	
 	public string unitType = "Melee";
 	public bool selected = false;
@@ -13,9 +14,9 @@ public class UnitController : MonoBehaviour {
 	public uint damage = 0;
 	public uint meleeArmour = 0;
 	public uint rangedArmour = 0;
-	public uint moveRangeLR = 1;
-	public uint moveRangeUD = 1;
-	public uint moveRangeDiag = 1;
+	public int moveRangeLR = 1;
+	public int moveRangeUD = 1;
+	public int moveRangeDiag = 1;
 	public int HitPoints = 10;
 	
 	public enum UnitState { NONE = 0  , CREATED = 1 , IDLE = 2 , MOVING = 3 , ATTACKING = 4 , TAKEHIT = 5 , DIEING = 6 , DEAD = 7 };
@@ -23,12 +24,14 @@ public class UnitController : MonoBehaviour {
 	private UnitState currentState = UnitState.NONE;
 	private UnitState previousState = UnitState.NONE;
 	
-	public string unitOwner = "";
+	public string unitOwner = "1";
 	private int unitID = -1;
 	private Vector3 targetDestination = new Vector3( -1.0f , -1.0f , -1.0f );
 	public GameObject target;
 	
 	private MatchController matchController;
+	private JTSScene0 scene0Script;
+	private GameObject[] tilesArray;
 	
 	// Use this for initialization
 	void Start () 
@@ -40,6 +43,11 @@ public class UnitController : MonoBehaviour {
 		
 		matchController = GameObject.Find("MatchControllerObj").GetComponent<MatchController>();
 		gameObject.tag = "Unit";
+		
+		GameObject pObj_;
+		pObj_ = GameObject.FindWithTag("oScene0");
+		scene0Script = pObj_.GetComponent<JTSScene0>();
+		tilesArray = scene0Script.tileArray;
 	}
 	
 	// Update is called once per frame
@@ -73,6 +81,12 @@ public class UnitController : MonoBehaviour {
 		if(matchController == null)
 		{
 			matchController = GameObject.Find("MatchControllerObj").GetComponent<MatchController>();
+		}
+		if(scene0Script == null)
+		{
+			GameObject pObj_;
+			pObj_ = GameObject.FindWithTag("oScene0");
+			scene0Script = pObj_.GetComponent<JTSScene0>();
 		}
 	}
 	
@@ -110,23 +124,24 @@ public class UnitController : MonoBehaviour {
 		uint t_return = 999;
 		uint t_arraySize;
 		//t_arraySize = GameObject.FindWithTag("Scripts/UserScripts/JTS/JTSScene0").GetComponent<JTSScene0>().tileSize;
-		t_arraySize = GameObject.FindWithTag("oScene0").GetComponent<JTSScene0>().tileSize;
-		GameObject pObj_;
+		
+		GameObject tileObj;
 		float offsetXZ = 0.2f;
+		
+		t_arraySize = scene0Script.tileSize;		
 		
 		for ( uint i = 0; i < t_arraySize; i++ ){
 			
-			
 			//pObj_ = GameObject.FindWithTag("Scripts/UserScripts/JTS/JTSScene0").GetComponent<JTSScene0>().tileArray[ i ];
-			pObj_ = GameObject.FindWithTag("oScene0").GetComponent<JTSScene0>().tileArray[ i ];
+			tileObj = scene0Script.tileArray[ i ];
 			//Color colourDestination = Color.white;
-			pObj_.renderer.material.color = new Color( 0.0f , 0.00f , 0.0f , 0.0f );//colourDestination;
+			//pObj_.renderer.material.color = new Color( 0.0f , 0.00f , 0.0f , 0.0f );//colourDestination;
 			
 			if (
-				transform.position.x > pObj_.transform.position.x - offsetXZ &&
-				transform.position.x < pObj_.transform.position.x + offsetXZ &&	
-				transform.position.z > pObj_.transform.position.z - offsetXZ &&
-				transform.position.z < pObj_.transform.position.z + offsetXZ	
+				transform.position.x > tileObj.transform.position.x - offsetXZ &&
+				transform.position.x < tileObj.transform.position.x + offsetXZ &&	
+				transform.position.z > tileObj.transform.position.z - offsetXZ &&
+				transform.position.z < tileObj.transform.position.z + offsetXZ	
 			)
 				
 			
@@ -136,6 +151,8 @@ public class UnitController : MonoBehaviour {
 				//pObj_.renderer.material.color = colourDestination;
 				
 				t_return = i;
+				onTileObj = tileObj;
+				break;
 				//Debug.Log ( pObj_.tag + " " + t_return );
 			}
 			
@@ -156,35 +173,39 @@ public class UnitController : MonoBehaviour {
 	public void HighlightMovementRange()
 	{
 		onTileIndex = getTileIndexAtPlayer();
+		TileController onTileController = onTileObj.GetComponent<TileController>();
 		
-		// Highlight tiles left and right
-		for(int i=0; i<moveRangeLR; i++)
+		//Debug.Log("onTileController.row = " + onTileController.row);
+		//Debug.Log("onTileController.column = " + onTileController.column);
+		
+		foreach(GameObject obj in tilesArray)
 		{
-			// get i+1th tile left of onTileIndex and call Highlight on it
-			// get i+1th tile right of onTileIndex and call Highlight on it
+			TileController tc = obj.GetComponent<TileController>();
+			//Debug.Log("tc.row = " + tc.row);
+			//Debug.Log("tc.column = " + tc.column);
+					
+			if( ( (tc.column <= onTileController.column + moveRangeLR) && (tc.column >= onTileController.column - moveRangeLR) ) && (tc.row == onTileController.row) )
+			{
+				tc.HighlightTile("red");
+			}
 			
-			// for example, if onTileIndex = 3 tile on 3rd row, and i=0, highlight 2nd and 4th tile on 3rd row
-			// and if i =1 the highlight 1st and 5th tile on 3rd row
+			if( ( (tc.row <= onTileController.row + moveRangeUD) && (tc.row >= onTileController.row - moveRangeUD) ) && (tc.column == onTileController.column) )
+			{
+				tc.HighlightTile("red");
+			}
+			/*
+			if( ( (tc.row <= onTileController.row + moveRangeDiag) && (tc.row > onTileController.row) )&& ( (tc.column <= onTileController.column + moveRangeDiag) && (tc.column >= onTileController.column - moveRangeDiag) && (tc.column != onTileController.column) ) )
+			{
+				tc.HighlightTile("red");
+			}
 			
-			// I am not sure how you are storing and retrieving tiles so I will leave this part to you.
-			// Try to do it if you are stuck somewhere wait for me to come online :)
+			if( ( (tc.row >= onTileController.row - moveRangeDiag) && (tc.row < onTileController.row) ) && ( (tc.column <= onTileController.column + moveRangeDiag) && (tc.column >= onTileController.column - moveRangeDiag) && (tc.column != onTileController.column) ) )
+			{
+				tc.HighlightTile("red");
+			}
+			*/
 		}
 		
-		// Highlight tiles up and down
-		for(int i=0; i<moveRangeUD; i++)
-		{
-			// get i+1th tile top of onTileIndex and call Highlight on it
-			// get i+1th tile bottom of onTileIndex and call Highlight on it
-		}
-		
-		// Highlight tiles diagonal to current tile
-		for(int i=0; i<moveRangeLR; i++)
-		{
-			// get i+1th tile left+up of onTileIndex and call Highlight on it
-			// get i+1th tile right+up of onTileIndex and call Highlight on it
-			// get i+1th tile left+down of onTileIndex and call Highlight on it
-			// get i+1th tile right+down of onTileIndex and call Highlight on it
-		}
 	}
 	
 	public void HighlightAttackRange()
