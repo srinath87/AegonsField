@@ -18,6 +18,7 @@ public class UnitController : MonoBehaviour {
 	public int moveRangeUD = 1;
 	public int moveRangeDiag = 1;
 	public int HitPoints = 10;
+	public float moveSpeed = 1f;
 	
 	public enum UnitState { NONE = 0  , CREATED = 1 , IDLE = 2 , MOVING = 3 , ATTACKING = 4 , TAKEHIT = 5 , DIEING = 6 , DEAD = 7 };
 	
@@ -61,9 +62,19 @@ public class UnitController : MonoBehaviour {
 			case UnitState.IDLE: 
 				break;
 			case UnitState.MOVING: 
-				// Movement Code.
-				// On destination reached, set state to idle.
-				// Debug.Log(currentState);
+				//Debug.Log("Unit Moving");
+				//Debug.Log(transform.position.x);
+				//Debug.Log(targetDestination.x);
+				//Debug.Log(transform.position.z);
+				//Debug.Log(targetDestination.z);
+				if(transform.position.x != targetDestination.x || transform.position.z != targetDestination.z)
+				{
+					transform.position = Vector3.MoveTowards(transform.position, new Vector3(targetDestination.x, transform.position.y, targetDestination.z), Time.deltaTime * moveSpeed);
+				}
+				else
+				{
+					currentState = UnitState.IDLE;
+				}
 				break;
 			case UnitState.ATTACKING: 
 				break;
@@ -98,7 +109,7 @@ public class UnitController : MonoBehaviour {
 			matchController.UnHighlightTiles();
 			if(unitOwner.Equals(matchController.GetPlayerName()))
 			{
-				Debug.Log("Unit Tapped 2!");
+				//Debug.Log("Unit Tapped 2!");
 				matchController.SetSelectedUnit(this.gameObject);
 				HighlightMovementRange();
 				HighlightAttackRange();
