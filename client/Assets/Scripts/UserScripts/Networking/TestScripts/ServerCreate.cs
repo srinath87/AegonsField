@@ -16,6 +16,7 @@ public class ServerCreate : MonoBehaviour {
 	void Start () {
 		Application.runInBackground = true;
 		PlayerList = new List<PlayerType>();
+		StartServer(32,1000);
 	}
 	 
 	// Update is called once per frame

@@ -13,9 +13,9 @@ public class UnitController : MonoBehaviour {
 	public uint damage = 0;
 	public uint meleeArmour = 0;
 	public uint rangedArmour = 0;
-	public uint moveRangeLR = 0;
-	public uint moveRangeUD = 0;
-	public uint moveRangeDiag = 0;
+	public uint moveRangeLR = 1;
+	public uint moveRangeUD = 1;
+	public uint moveRangeDiag = 1;
 	public int HitPoints = 10;
 	
 	public enum UnitState { NONE = 0  , CREATED = 1 , IDLE = 2 , MOVING = 3 , ATTACKING = 4 , TAKEHIT = 5 , DIEING = 6 , DEAD = 7 };
@@ -23,7 +23,7 @@ public class UnitController : MonoBehaviour {
 	private UnitState currentState = UnitState.NONE;
 	private UnitState previousState = UnitState.NONE;
 	
-	private string unitOwner = "";
+	public string unitOwner = "";
 	private int unitID = -1;
 	private Vector3 targetDestination = new Vector3( -1.0f , -1.0f , -1.0f );
 	public GameObject target;
@@ -34,11 +34,12 @@ public class UnitController : MonoBehaviour {
 	void Start () 
 	{
 		rayHitPoint = new Vector3( 0.0f , 0.0f , 0.0f );
-		onTileIndex = 999;//maybe scan tile array at start ?
+		onTileIndex = 0;//maybe scan tile array at start ?
 		renderer.material.color = new Color( 1 , 1 , 1 , 0.5f );
 		gameObject.AddComponent("InputInterface");
 		
 		matchController = GameObject.Find("MatchControllerObj").GetComponent<MatchController>();
+		gameObject.tag = "Unit";
 	}
 	
 	// Update is called once per frame
@@ -54,6 +55,7 @@ public class UnitController : MonoBehaviour {
 			case UnitState.MOVING: 
 				// Movement Code.
 				// On destination reached, set state to idle.
+				// Debug.Log(currentState);
 				break;
 			case UnitState.ATTACKING: 
 				break;
@@ -74,14 +76,15 @@ public class UnitController : MonoBehaviour {
 		}
 	}
 	
-	void OnTap()
+	void OnMouseDown()
 	{
-		Debug.Log("Unit Tapped!");
+		//Debug.Log("Unit Tapped!");
 		if(matchController != null)
 		{
 			matchController.UnHighlightTiles();
 			if(unitOwner.Equals(matchController.GetPlayerName()))
 			{
+				Debug.Log("Unit Tapped 2!");
 				matchController.SetSelectedUnit(this.gameObject);
 				HighlightMovementRange();
 				HighlightAttackRange();
@@ -95,6 +98,7 @@ public class UnitController : MonoBehaviour {
 			}
 		}
 	}
+
 	
 	public int GetUnitId()
 	{
@@ -151,15 +155,41 @@ public class UnitController : MonoBehaviour {
 		
 	public void HighlightMovementRange()
 	{
-		// Go through all the 3 movement ranges and highlight the squares using TileController.HighlightTile(color). 
-		// Make it green or blue instead of red. We can use red for attack range.
+		onTileIndex = getTileIndexAtPlayer();
+		
+		// Highlight tiles left and right
+		for(int i=0; i<moveRangeLR; i++)
+		{
+			// get i+1th tile left of onTileIndex and call Highlight on it
+			// get i+1th tile right of onTileIndex and call Highlight on it
+			
+			// for example, if onTileIndex = 3 tile on 3rd row, and i=0, highlight 2nd and 4th tile on 3rd row
+			// and if i =1 the highlight 1st and 5th tile on 3rd row
+			
+			// I am not sure how you are storing and retrieving tiles so I will leave this part to you.
+			// Try to do it if you are stuck somewhere wait for me to come online :)
+		}
+		
+		// Highlight tiles up and down
+		for(int i=0; i<moveRangeUD; i++)
+		{
+			// get i+1th tile top of onTileIndex and call Highlight on it
+			// get i+1th tile bottom of onTileIndex and call Highlight on it
+		}
+		
+		// Highlight tiles diagonal to current tile
+		for(int i=0; i<moveRangeLR; i++)
+		{
+			// get i+1th tile left+up of onTileIndex and call Highlight on it
+			// get i+1th tile right+up of onTileIndex and call Highlight on it
+			// get i+1th tile left+down of onTileIndex and call Highlight on it
+			// get i+1th tile right+down of onTileIndex and call Highlight on it
+		}
 	}
 	
 	public void HighlightAttackRange()
 	{
-		// Go through the attack range, and if any units are standing on the blocks within that range and 
-		// their unitOwner is not same as the selected unit's unitOwner, then  highlight that square red.
-		// Same as before, use TileController.HighlightTile(color)
+		// Later :)
 	}
 	
 	
@@ -183,133 +213,4 @@ public class UnitController : MonoBehaviour {
 		targetDestination = newDestination;
 	}
 
-
-	/*
-	uint getTileIndexAtTouch( Vector3 touchVector_ )
-	{
-		uint t_return = 999;
-		uint t_arraySize;
-		t_arraySize = GameObject.FindWithTag("oScene0").GetComponent<JTSScene0>().tileSize;
-		GameObject pObj_;
-		float offsetXZ = 0.5f;
-		
-		for ( uint i = 0; i < t_arraySize; i++ ){
-			
-			pObj_ = GameObject.FindWithTag("oScene0").GetComponent<JTSScene0>().tileArray[ i ];
-			
-			if (
-				touchVector_.x > pObj_.transform.position.x - offsetXZ &&
-				touchVector_.x < pObj_.transform.position.x + offsetXZ &&	
-				touchVector_.z > pObj_.transform.position.z - offsetXZ &&
-				touchVector_.z < pObj_.transform.position.z + offsetXZ	
-			)
-				
-			
-			{	
-				//Set player tile colour.
-				//Color colourDestination = Color.red;
-				//pObj_.renderer.material.color = colourDestination;
-				
-				//Lazy i know!, if only equal to red.
-				if ( pObj_.renderer.material.color.g == 0 ){
-					//float t_y;
-					//t_y = pObj_.transform.position.y;
-					
-					transform.position = new Vector3( pObj_.transform.position.x , transform.position.y , pObj_.transform.position.z );
-				}
-				t_return = i;
-				Debug.Log ( pObj_.renderer.material.color.g + " " + t_return );
-			}
-			
-			
-			//Color colourDestination = Color.white;
-			pObj_.renderer.material.color = new Color( 0.0f , 0.0f , 0.0f , 0.0f );//colourDestination;
-			
-		}
-		
-		return t_return;
-		
-	}
-	
-	void setTileColour( uint index_ )
-	{
-		
-		uint t_arraySize;
-		//t_arraySize = GameObject.FindWithTag("Scripts/UserScripts/JTS/JTSScene0").GetComponent<JTSScene0>().tileSize;
-		t_arraySize = GameObject.FindWithTag("oScene0").GetComponent<JTSScene0>().tileSize;
-	
-		GameObject pObj_ , pPlayerTile_;
-		//pPlayerTile_ = GameObject.FindWithTag("Scripts/UserScripts/JTS/JTSScene0").GetComponent<JTSScene0>().tileArray[ index_ ];
-		pPlayerTile_ = GameObject.FindWithTag("oScene0").GetComponent<JTSScene0>().tileArray[ index_ ];
-		
-		//Color colourDestination = Color.red;
-
-		
-		//if player.type = blah, do this, or do that... { ?different loop? }
-		uint characterType = 0; //Maybe Enumeration?
-
-		uint highlightIndex = 999;
-		float debug_distance;
-		float offsetXZ = 2.0f;
-		
-		switch( characterType ){
-			
-			case 0:
-				//left
-				highlightIndex = index_ - 5;
-				if ( highlightIndex >= 0 && highlightIndex < t_arraySize ){
-					//pObj_ = GameObject.FindWithTag("Scripts/UserScripts/JTS/JTSScene0").GetComponent<JTSScene0>().tileArray[ highlightIndex ];
-					pObj_ = GameObject.FindWithTag("oScene0").GetComponent<JTSScene0>().tileArray[ highlightIndex ];
-					debug_distance = distancePoints( pPlayerTile_.transform.position.x , pPlayerTile_.transform.position.z , pObj_.transform.position.x , pObj_.transform.position.z );
-					if ( debug_distance < offsetXZ ){
-						//pObj_.renderer.material.color = colourDestination;
-						TileController t_tile = ( TileController )pObj_.GetComponent( typeof( TileController ) );
-						t_tile.HighlightTile( "red" );
-					}
-				}
-			
-				//right
-				highlightIndex = index_ + 5;
-				if ( highlightIndex >= 0 && highlightIndex < t_arraySize ){
-					//pObj_ = GameObject.FindWithTag("Scripts/UserScripts/JTS/JTSScene0").GetComponent<JTSScene0>().tileArray[ highlightIndex ];
-					pObj_ = GameObject.FindWithTag("oScene0").GetComponent<JTSScene0>().tileArray[ highlightIndex ];
-					debug_distance = distancePoints( pPlayerTile_.transform.position.x , pPlayerTile_.transform.position.z , pObj_.transform.position.x , pObj_.transform.position.z );
-					if ( debug_distance < offsetXZ ){
-						//pObj_.renderer.material.color = colourDestination;
-						TileController t_tile = ( TileController )pObj_.GetComponent( typeof( TileController ) );
-						t_tile.HighlightTile( "red" );
-					}
-				}
-			
-				//up
-				highlightIndex = index_ + 1;
-				if ( highlightIndex >= 0 && highlightIndex < t_arraySize ){
-					//pObj_ = GameObject.FindWithTag("Scripts/UserScripts/JTS/JTSScene0").GetComponent<JTSScene0>().tileArray[ highlightIndex ];
-					pObj_ = GameObject.FindWithTag("oScene0").GetComponent<JTSScene0>().tileArray[ highlightIndex ];
-					debug_distance = distancePoints( pPlayerTile_.transform.position.x , pPlayerTile_.transform.position.z , pObj_.transform.position.x , pObj_.transform.position.z );
-					if ( debug_distance < offsetXZ ){
-						//pObj_.renderer.material.color = colourDestination;
-						TileController t_tile = ( TileController )pObj_.GetComponent( typeof( TileController ) );
-						t_tile.HighlightTile( "red" );
-					}
-				}
-			
-				//down
-				highlightIndex = index_ - 1;
-				if ( highlightIndex >= 0 && highlightIndex < t_arraySize ){
-					//pObj_ = GameObject.FindWithTag("Scripts/UserScripts/JTS/JTSScene0").GetComponent<JTSScene0>().tileArray[ highlightIndex ];
-					pObj_ = GameObject.FindWithTag("oScene0").GetComponent<JTSScene0>().tileArray[ highlightIndex ];
-					debug_distance = distancePoints( pPlayerTile_.transform.position.x , pPlayerTile_.transform.position.z , pObj_.transform.position.x , pObj_.transform.position.z );
-					if ( debug_distance < offsetXZ ){
-						//pObj_.renderer.material.color = colourDestination;
-						TileController t_tile = ( TileController )pObj_.GetComponent( typeof( TileController ) );
-						t_tile.HighlightTile( "red" );
-					}
-				}
-			
-			break;
-		}			
-		
-	}	
-	*/
 }

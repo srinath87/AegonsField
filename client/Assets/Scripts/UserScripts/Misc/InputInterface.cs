@@ -12,11 +12,13 @@ public class InputInterface : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
-	
+		
 	}
 	
 	public void Tapped()
 	{
-		SendMessage("OnTap");
+		//SendMessage("OnTap");
 	}
+	
+	
 }

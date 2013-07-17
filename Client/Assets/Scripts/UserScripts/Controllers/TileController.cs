@@ -21,17 +21,6 @@ public class TileController : MonoBehaviour {
 	{
 		if ( !isOccupied )	
 		{
-			float r , g , b;
-			r = renderer.material.color.r;
-			g = renderer.material.color.g;
-			b = renderer.material.color.b;
-			
-			switch ( colour_ )
-			{
-				case "red":
-					renderer.material.color = new Color( 1.0f , 0.0f , 0.0f , 1.0f );
-				break;		
-			}
 			isHighlighted = true;
 		}	
 	}
@@ -43,7 +32,7 @@ public class TileController : MonoBehaviour {
 	}		
 	
 	
-	public void OnTap()
+	public void OnMouseDown()
 	{
 		Debug.Log("Tile Tapped!");
 		if ( isHighlighted )	
@@ -60,6 +49,15 @@ public class TileController : MonoBehaviour {
 		if(controller == null)
 		{
 			controller = GameObject.Find("MatchControllerObj").GetComponent<MatchController>();
+		}
+		
+		if(isHighlighted)
+		{
+			renderer.material.color = new Color(1.0f, 0f, 0f, 1.0f);
+		}
+		else
+		{
+			renderer.material.color = new Color(1.0f, 1.0f, 1.0f, 0f);
 		}
 	}
 	

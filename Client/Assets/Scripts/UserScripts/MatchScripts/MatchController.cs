@@ -6,7 +6,7 @@ using AssemblyCSharp;
 public class MatchController : MonoBehaviour {
 	
 	private int matchID;
-	private string playerName;
+	public string playerName;
 	private string playerTeam;
 	private string opponentName;
 	private string opponentTeam;
@@ -31,7 +31,7 @@ public class MatchController : MonoBehaviour {
 	
 	public void Update()
 	{
-		RaycastToMouseClick();
+		//RaycastToMouseClick();
 		//TouchScreen();
 	}
 	
@@ -53,62 +53,53 @@ public class MatchController : MonoBehaviour {
 		
 	}
 	
-	void RaycastToMouseClick()
-	{
-		if ( Input.GetMouseButtonDown( 0 ) )
-		{
-			int layerMask = ~( 1 << 8 );
-			//Debug.Log ( layerMask );
-			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-		    RaycastHit hit = new RaycastHit();
-		    if ( Physics.Raycast ( ray , out hit , Mathf.Infinity , layerMask ) )
-		    {
-		        Debug.DrawLine (ray.origin, hit.point);
-				Debug.Log( hit.point );
-				//getTileIndexAtTouch( hit.point );
-				hit.transform.gameObject.GetComponent<InputInterface>().Tapped();
-		    }
-		}
-	}
-	
 	void TouchScreen()
 	{
-        int fingerCount = 0;
-		int layerMask = ~( 1 << 8 );
-		Ray ray = Camera.main.ScreenPointToRay(new Vector3(Input.touches[0].position.x, Input.touches[0].position.y, 0f));
+        // Code for OnMouseDown in the iPhone. Unquote to test.
 		RaycastHit hit = new RaycastHit();
-        foreach (Touch touch in Input.touches) 
+		for (int i = 0; i < Input.touchCount; ++i) 
 		{
-            if (touch.phase != TouchPhase.Ended && touch.phase != TouchPhase.Canceled)
+			if (Input.GetTouch(i).phase.Equals(TouchPhase.Began)) 
 			{
-				if ( Physics.Raycast ( ray , out hit , Mathf.Infinity , layerMask ) )
-			    {
-			        //Debug.DrawLine (ray.origin, hit.point);
-					//Debug.Log( hit.point );
-					//getTileIndexAtTouch( hit.point );
-					hit.transform.gameObject.GetComponent<InputInterface>().Tapped();
-			    }
-			}
-               // fingerCount++;
-        }
-       // if (fingerCount > 0)
-           // print("User has " + fingerCount + " finger(s) touching the screen");
+				// Construct a ray from the current touch coordinates
+				Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(i).position);
+				if (Physics.Raycast(ray, out hit)) 
+				{
+					hit.transform.gameObject.SendMessage("OnMouseDown");
+			 	}
+		   }
+	   }
 	}
+	
 	
 	public void MoveUnit( int unitId , Vector3 targetLocation )
 	{
 		GameObject unitToMove = GetUnit( unitId );
 		if( unitToMove != null )
 		{
-			unitToMove.GetComponent<UnitController>().SetState( 3 );
-			unitToMove.GetComponent<UnitController>().SetTargetDestination( targetLocation );
+			UnitController controller = unitToMove.GetComponent<UnitController>();
+			if(controller != null)
+			{
+				controller.SetState( 3 );
+				controller.SetTargetDestination( targetLocation );
+			}
 		}
 	}
 	
 	public GameObject GetUnit(int unitId )
 	{
 		// Needs to be implemented later.
-		return new GameObject();
+		GameObject[] objs = GameObject.FindGameObjectsWithTag("Unit");
+		for(int i=0; i<objs.Length; i++)
+		{
+			//UnitController cont = null;
+			//cont = obj.GetComponent<UnitController>();
+			if(/*cont != null && (cont*/objs[i].GetComponent<UnitController>().GetUnitId() == unitId)
+			{
+				return objs[i];
+			}
+		}
+		return null;
 	}
 	
 	public void AttackUnit( int AttackerID , int targetID )
@@ -136,7 +127,7 @@ public class MatchController : MonoBehaviour {
 	{
 		MoveUnit( unitId , targetLocation );
 		
-		if( owner == playerName )
+		if( owner.Equals(playerName) )
 		{
 			//RecordAction( Enum actionType , string owner , int attackerId , int targetId, Vector3 targetLocation );
 			actionsLeft--;
@@ -181,7 +172,7 @@ public class MatchController : MonoBehaviour {
 	
 	public void UnHighlightTiles()
 	{
-		GameObject[] tiles = GameObject.FindGameObjectsWithTag("Tiles");
+		GameObject[] tiles = GameObject.FindGameObjectsWithTag("oTile");
 		foreach(GameObject tile in tiles)
 		{
 			tile.GetComponent<TileController>().UnHighlightTile();
