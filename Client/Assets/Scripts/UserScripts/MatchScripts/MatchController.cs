@@ -55,17 +55,28 @@ public class MatchController : MonoBehaviour {
 	
 	void TouchScreen()
 	{
-        // Code for OnMouseDown in the iPhone. Unquote to test.
-		RaycastHit hit = new RaycastHit();
+		RaycastHit[] hits;
 		for (int i = 0; i < Input.touchCount; ++i) 
 		{
 			if (Input.GetTouch(i).phase.Equals(TouchPhase.Began)) 
 			{
-				// Construct a ray from the current touch coordinates
 				Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(i).position);
-				if (Physics.Raycast(ray, out hit)) 
+				hits = Physics.RaycastAll(ray);
+				foreach(RaycastHit hit in hits) 
 				{
-					hit.transform.gameObject.SendMessage("OnMouseDown");
+					if(hit.transform.gameObject.CompareTag("oPlayer"))
+					{
+						hit.transform.gameObject.SendMessage("OnMouseDown");
+						return;
+					}
+			 	}
+				foreach(RaycastHit hit in hits) 
+				{
+					if(hit.transform.gameObject.CompareTag("oTile"))
+					{
+						hit.transform.gameObject.SendMessage("OnMouseDown");
+						return;
+					}
 			 	}
 		   }
 	   }

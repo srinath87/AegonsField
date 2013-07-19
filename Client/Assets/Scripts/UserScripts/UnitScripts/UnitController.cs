@@ -208,7 +208,7 @@ public class UnitController : MonoBehaviour {
 			{
 				tc.HighlightTile("red");
 			}
-			/*
+			
 			if( ( (tc.row <= onTileController.row + moveRangeDiag) && (tc.row > onTileController.row) )&& ( (tc.column <= onTileController.column + moveRangeDiag) && (tc.column >= onTileController.column - moveRangeDiag) && (tc.column != onTileController.column) ) )
 			{
 				tc.HighlightTile("red");
@@ -218,7 +218,7 @@ public class UnitController : MonoBehaviour {
 			{
 				tc.HighlightTile("red");
 			}
-			*/
+			
 		}
 		
 	}
