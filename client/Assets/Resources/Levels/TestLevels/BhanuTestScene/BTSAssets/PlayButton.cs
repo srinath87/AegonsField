@@ -18,7 +18,7 @@ public class PlayButton : UIButtonSound {
 		if (enabled && trigger == Trigger.OnClick)
 		{
 			Destroy((Object)GameObject.Find("MainMenuScreen"));
-			Application.LoadLevel("Bricks");
+			Application.LoadLevel("BhanuTestScene");
 		}
 	}
 }
