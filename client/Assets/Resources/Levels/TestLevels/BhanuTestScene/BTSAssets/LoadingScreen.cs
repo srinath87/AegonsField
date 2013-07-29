@@ -9,7 +9,6 @@ public class LoadingScreen : MonoBehaviour
 	void Start () 
 	{
 		StartCoroutine("LoadScene" , "MainMenuScreen");
-		Destroy((Object)GameObject.Find("LoadingScreen"));
 	}
 	
 	
@@ -25,7 +24,8 @@ public class LoadingScreen : MonoBehaviour
 		
 		if(!SceneToLoad.Equals("None"))
 		{
-			Application.LoadLevel(SceneToLoad);	
+			Application.LoadLevel(SceneToLoad);
+			Destroy((Object)GameObject.Find("LoadingScreen"));
 		}
 		
 	}
