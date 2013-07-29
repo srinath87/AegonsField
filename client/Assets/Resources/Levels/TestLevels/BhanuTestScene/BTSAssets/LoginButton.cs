@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SubmitButton : UIButtonSound {
+public class LoginButton : UIButtonSound {
 
 	void Start () 
 	{
@@ -17,7 +17,7 @@ public class SubmitButton : UIButtonSound {
 	{
 		if (enabled && trigger == Trigger.OnClick)
 		{
-			Destroy((Object)GameObject.Find("LogIn"));
+			Destroy((Object)GameObject.Find("LogInScreen"));
 			Application.LoadLevel("LoadingScreen");
 		}
 	}
