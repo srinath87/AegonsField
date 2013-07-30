@@ -17,6 +17,9 @@ public class OptionsMenuButton : UIButtonSound {
 	{
 		if (enabled && trigger == Trigger.OnClick)
 		{
+			//GameObject OptionsPanel = GameObject.Find ("OptionsPanel");
+			//NGUITools.SetActive(OptionsPanel , false);
+			
 			Destroy((Object)GameObject.Find("OptionsScreen"));
 			Application.LoadLevel("MainMenuScreen");
 		}

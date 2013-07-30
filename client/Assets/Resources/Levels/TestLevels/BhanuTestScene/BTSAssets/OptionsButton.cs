@@ -5,7 +5,7 @@ public class OptionsButton : UIButtonSound {
 
 	void Start () 
 	{
-	
+		
 	}
 	
 	void Update () 
@@ -17,6 +17,9 @@ public class OptionsButton : UIButtonSound {
 	{
 		if (enabled && trigger == Trigger.OnClick)
 		{
+			//GameObject OptionsPanel = GameObject.Find ("OptionsPanel");
+			//NGUITools.SetActive(OptionsPanel , true);	
+			
 			Destroy((Object)GameObject.Find("MainMenuScreen"));
 			Application.LoadLevel("OptionsScreen");
 		}
