@@ -22,12 +22,12 @@ public class ProgressBar : MonoBehaviour {
 	
 	void Start()
 	{
-		
+		StartCoroutine("UpdateProgressBar");
 	}
 	
 	void Update()
 	{
-		UpdateDisplay (0.1f);	
+		
 	}
 	
 	public void UpdateDisplay(float x)
@@ -43,5 +43,13 @@ public class ProgressBar : MonoBehaviour {
 		}
 		
 		slider.sliderValue = slider.sliderValue + x;
+	}
+	
+	IEnumerator UpdateProgressBar()
+	{
+		yield return new WaitForSeconds(0.07f);
+		UpdateDisplay(0.1f);
+		StartCoroutine("UpdateProgressBar");
+		
 	}
 }
