@@ -17,9 +17,7 @@ public class OptionsMenuButton : UIButtonSound {
 	{
 		if (enabled && trigger == Trigger.OnClick)
 		{
-			Destroy((Object)GameObject.Find("Options"));
-			Destroy((Object)GameObject.Find("MenuButton"));
-			
+			Destroy((Object)GameObject.Find("OptionsScreen"));
 			Application.LoadLevel("MainMenuScreen");
 		}
 	}

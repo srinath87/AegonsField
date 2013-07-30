@@ -17,9 +17,7 @@ public class ChallengesMenuButton : UIButtonSound {
 	{
 		if (enabled && trigger == Trigger.OnClick)
 		{
-			Destroy((Object)GameObject.Find("Challenges"));
-			Destroy((Object)GameObject.Find("MenuButton"));
-			
+			Destroy((Object)GameObject.Find("ChallengesScreen"));
 			Application.LoadLevel("MainMenuScreen");
 			
 		}

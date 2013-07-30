@@ -17,9 +17,7 @@ public class TrainingMenuButton : UIButtonSound {
 	{
 		if (enabled && trigger == Trigger.OnClick)
 		{
-			Destroy((Object)GameObject.Find("Training"));
-			Destroy((Object)GameObject.Find("MenuButton"));
-			
+			Destroy((Object)GameObject.Find("TrainingScreen"));
 			Application.LoadLevel("MainMenuScreen");
 		}
 	}
