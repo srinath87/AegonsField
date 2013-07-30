@@ -1,7 +1,7 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
-public class CustomizeMenuButton : UIButtonSound {
+public class AvatarsButton : UIButtonSound {
 
 	void Start () 
 	{
@@ -18,7 +18,7 @@ public class CustomizeMenuButton : UIButtonSound {
 		if (enabled && trigger == Trigger.OnClick)
 		{
 			Destroy((Object)GameObject.Find("CustomizeScreen"));
-			Application.LoadLevel("MainMenuScreen");
+			Application.LoadLevel("AvatarsScreen");
 			
 		}
 	}
