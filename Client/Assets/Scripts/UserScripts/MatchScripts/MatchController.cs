@@ -113,7 +113,7 @@ public class MatchController : MonoBehaviour {
 		return null;
 	}
 	
-	public void AttackUnit( int AttackerID , int targetID )
+	public void AttackUnit( int attackerID , int targetID )
 	{
 		if( actionsLeft <= 0 )
 		{

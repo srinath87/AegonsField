@@ -39,7 +39,7 @@ public class GameManager : MonoBehaviour {
 		port = 1000;
 		playerName = "test";
 		
-		GetComponent<ServerConnect>().ConnectToServer(ip, port);
+		//GetComponent<ServerConnect>().ConnectToServer(ip, port);
 		
 	}
 	
