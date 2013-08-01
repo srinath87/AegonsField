@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour {
 	{
 		DontDestroyOnLoad(gameObject);
 		
-		StartCoroutine("LoadScene", "ServerConnect");
+		//StartCoroutine("LoadScene", "ServerConnect");
 		
 		ip = "localhost";
 		port = 1000;
