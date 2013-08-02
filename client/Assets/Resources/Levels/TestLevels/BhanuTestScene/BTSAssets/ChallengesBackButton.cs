@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class ChallengesMenuButton : UIButtonSound {
+public class ChallengesBackButton : UIButtonSound {
 
 	void Start () 
 	{
