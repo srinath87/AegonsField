@@ -12,14 +12,15 @@ public class JTSScene0 : MonoBehaviour {
 	public uint playerSize;
 	public uint playerIndex;
 	
-	
+	public GameObject[] enemyArray_debug;
+	public uint enemyIndex_debug;	
 	
 	// Use this for initialization
 	void Start () {
 		
 		startTiles();
 		startPlayer();
-
+		startEnemy_debug(); // delete EVERYTHING with -debug
 		
 		
 	}
@@ -73,8 +74,11 @@ public class JTSScene0 : MonoBehaviour {
 		//Make player.
 		for (int i = 0; i < 1; i = i + 1){
 			for ( int j = 0; j < 1; j = j + 1 ){
-				GameObject ins = ( GameObject )Instantiate( Resources.Load( "Levels/TestLevels/JasTestScene/JTS_Player" ) );
+				GameObject ins = ( GameObject )Instantiate( Resources.Load( "Common/Units/PF_Swordsman" ) );
 				ins.transform.position = new Vector3( 11.0f + 1.0f * i , 0.5f , 11.0f + 1.0f * j );
+				ins.AddComponent("UnitController");
+				ins.transform.localEulerAngles = new Vector3( 0.0f , 180.0f , 0.0f );
+				ins.GetComponent<UnitController>().unitID = 1; //debug
 				playerArray[ playerIndex ] = ins;	
 				playerIndex++;
 			}
@@ -82,5 +86,30 @@ public class JTSScene0 : MonoBehaviour {
 		
 		
 	}
+
+	void startEnemy_debug() {
 		
+		//Set max size.
+		uint enemySize = 50;
+		//Set index.
+		enemyIndex_debug = 0;
+		//Set array.
+		enemyArray_debug = new GameObject[ enemySize ];
+		
+		//Make enemies.
+		for (int i = 0; i < 1; i = i + 1){
+			for ( int j = 0; j < 1; j = j + 1 ){
+				GameObject ins = ( GameObject )Instantiate( Resources.Load( "Common/Units/PF_Swordsman" ) );
+				ins.transform.position = new Vector3( 15.0f + 1.0f * i , 0.5f , 11.0f + 1.0f * j );
+				ins.AddComponent("UnitController");
+				ins.GetComponent<UnitController>().unitOwner = "2"; //set to be controlled by 'other'
+				ins.GetComponent<UnitController>().unitID = 2; //debug
+				ins.transform.localEulerAngles = new Vector3( 0.0f , 0.0f , 0.0f );
+				enemyArray_debug[ enemyIndex_debug ] = ins;	
+				enemyIndex_debug++;
+			}
+		}
+		
+		
+	}
 }

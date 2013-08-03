@@ -8,14 +8,14 @@ public class TileController : MonoBehaviour {
 	public bool isOccupied;
 	public int row = 0;
 	public int column = 0;
-	public MatchController controller;
+	public MatchController matchController;
 	
 	// Use this for initialization
 	void Start () 
 	{
 		gameObject.AddComponent("InputInterface");
 		UnHighlightTile();
-		controller = GameObject.Find("MatchControllerObj").GetComponent<MatchController>();
+		matchController = GameObject.Find("MatchControllerObj").GetComponent<MatchController>();
 		isOccupied = false;
 	}
 	
@@ -23,13 +23,22 @@ public class TileController : MonoBehaviour {
 	{
 		if ( !isOccupied )	
 		{
+			float t_alpha = 1.0f;
+			switch( colour_ )
+			{
+				
+				case "red":	renderer.material.color = new Color( 1.0f, 0.0f , 0.0f , t_alpha ); break;
+				case "blue": renderer.material.color = new Color( 0.0f, 0.0f , 1.0f , t_alpha ); break;
+				case "green": renderer.material.color = new Color( 0.0f, 1.0f , 0.0f , t_alpha ); break;
+				
+			}
 			isHighlighted = true;
 		}	
 	}
 	
 	public void UnHighlightTile()
 	{
-		renderer.material.color = new Color( 1.0f , 1.0f , 1.0f , 1.0f );
+		renderer.material.color = new Color( 1.0f , 1.0f , 1.0f , 0.0f );
 		isHighlighted = false;	
 	}		
 	
@@ -39,23 +48,25 @@ public class TileController : MonoBehaviour {
 		//Debug.Log("Tile Tapped!");
 		if ( isHighlighted )	
 		{
-			if(controller.GetSelectedUnit() != null)
+			if(matchController.GetSelectedUnit() != null)
 			{
-				controller.PerformMoveAction(gameObject.transform.position);
+				matchController.PerformMoveAction(gameObject.transform.position);
 			}
 		}
-		controller.UnHighlightTiles();
+		matchController.UnHighlightTiles();
+		matchController.SetSelectedUnit(null);
 	}
 	
 	
 	// Update is called once per frame
 	void Update () 
 	{
-		if(controller == null)
-		{
-			controller = GameObject.Find("MatchControllerObj").GetComponent<MatchController>();
-		}
 		
+		if(matchController == null)
+		{
+			matchController = GameObject.Find("MatchControllerObj").GetComponent<MatchController>();
+		}
+		/*
 		if(isHighlighted)
 		{
 			renderer.material.color = new Color(1.0f, 0f, 0f, 1.0f);
@@ -64,6 +75,8 @@ public class TileController : MonoBehaviour {
 		{
 			renderer.material.color = new Color(1.0f, 1.0f, 1.0f, 0f);
 		}
+		*/
+		
 	}
 	
 }

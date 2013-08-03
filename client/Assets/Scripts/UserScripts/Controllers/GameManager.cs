@@ -33,14 +33,6 @@ public class GameManager : MonoBehaviour {
 	{
 		DontDestroyOnLoad(gameObject);
 		
-		//StartCoroutine("LoadScene", "ServerConnect");
-		
-		ip = "localhost";
-		port = 1000;
-		playerName = "test";
-		
-		//GetComponent<ServerConnect>().ConnectToServer(ip, port);
-		
 	}
 	
 	// Update is called once per frame

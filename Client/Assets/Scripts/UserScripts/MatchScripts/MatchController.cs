@@ -24,7 +24,7 @@ public class MatchController : MonoBehaviour {
 		opponentName = "";
 		playerName = "1";
 		selectedUnit = null;
-		actionsLeft = 0;
+		actionsLeft = 2;
 		myTurn = false;
 		actionsInTurn = new List<Action>();
 	}
@@ -82,6 +82,22 @@ public class MatchController : MonoBehaviour {
 	   }
 	}
 	
+	public GameObject GetUnit(int unitId )
+	{
+		// Needs to be implemented later.
+		GameObject[] objs = GameObject.FindGameObjectsWithTag("Unit");
+		for(int i=0; i<objs.Length; i++)
+		{
+			//UnitController cont = null;
+			//cont = obj.GetComponent<UnitController>();
+			if(/*cont != null && (cont*/objs[i].GetComponent<UnitController>().GetUnitId() == unitId)
+			{
+				//Debug.Log("Returning Unit " + objs[i] ); 
+				return objs[i];
+			}
+		}
+		return null;
+	}	
 	
 	public void MoveUnit( int unitId , Vector3 targetLocation )
 	{
@@ -97,29 +113,51 @@ public class MatchController : MonoBehaviour {
 		}
 	}
 	
-	public GameObject GetUnit(int unitId )
-	{
-		// Needs to be implemented later.
-		GameObject[] objs = GameObject.FindGameObjectsWithTag("Unit");
-		for(int i=0; i<objs.Length; i++)
-		{
-			//UnitController cont = null;
-			//cont = obj.GetComponent<UnitController>();
-			if(/*cont != null && (cont*/objs[i].GetComponent<UnitController>().GetUnitId() == unitId)
-			{
-				return objs[i];
-			}
-		}
-		return null;
-	}
-	
 	public void AttackUnit( int attackerID , int targetID )
 	{
+		/*
 		if( actionsLeft <= 0 )
 		{
 			return;
 		}
+		*/ 
+		//^ ERRORING, WILL NOT EXECUTE PAST.
+		
+
 		// Later. I need to think on this a bit.
+		GameObject unitAttacking = GetUnit( attackerID );
+		GameObject unitBeingAttack = GetUnit( targetID );
+		
+		//Debug.Log( "#$#$" + attackerID );
+		
+		//if( unitAttacking != null && unitBeingAttack != null )
+		//{
+			
+
+			
+			UnitController enemy = unitBeingAttack.GetComponent<UnitController>();
+			UnitController player = unitAttacking.GetComponent<UnitController>();
+			
+			//if(enemy != null && player != null)
+			//{
+				//--single call(s), not 24/7
+				
+				//rotate player to face enemy
+				Vector3 targetLocation = unitBeingAttack.transform.position;
+				player.setUnitRotation( targetLocation );
+				
+				//set unit state to attacking
+				player.SetState( 4 );
+
+				//take damage
+				enemy.TakeDamage( player.damage , player.unitType );
+				enemy.animation.Play("Walk");
+				enemy.renderer.material.color = new Color( 1.0f , 0.0f , 0.0f , 0.5f );
+				//--.
+					
+			//}
+		///}
+		
 	}
 	
 	public void PerformPendingActions()
@@ -188,10 +226,6 @@ public class MatchController : MonoBehaviour {
 		{
 			tile.GetComponent<TileController>().UnHighlightTile();
 		}
-		if(selectedUnit != null)
-		{
-			selectedUnit = null;
-		}
 	}
 		
 	public void SetPlayerName(string name)
@@ -221,6 +255,7 @@ public class MatchController : MonoBehaviour {
 	
 	public GameObject GetSelectedUnit()
 	{
+		//Debug.Log(selectedUnit.ToString());
 		return selectedUnit;
 	}
 
