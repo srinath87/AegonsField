@@ -78,6 +78,7 @@ public class JTSScene0 : MonoBehaviour {
 				ins.transform.position = new Vector3( 11.0f + 1.0f * i , 0.5f , 11.0f + 1.0f * j );
 				ins.AddComponent("UnitController");
 				ins.transform.localEulerAngles = new Vector3( 0.0f , 180.0f , 0.0f );
+				ins.GetComponent<UnitController>().unitOwner = "player1";
 				ins.GetComponent<UnitController>().unitID = 1; //debug
 				playerArray[ playerIndex ] = ins;	
 				playerIndex++;
@@ -102,7 +103,7 @@ public class JTSScene0 : MonoBehaviour {
 				GameObject ins = ( GameObject )Instantiate( Resources.Load( "Common/Units/PF_Swordsman" ) );
 				ins.transform.position = new Vector3( 15.0f + 1.0f * i , 0.5f , 11.0f + 1.0f * j );
 				ins.AddComponent("UnitController");
-				ins.GetComponent<UnitController>().unitOwner = "2"; //set to be controlled by 'other'
+				ins.GetComponent<UnitController>().unitOwner = "player2"; //set to be controlled by 'other'
 				ins.GetComponent<UnitController>().unitID = 2; //debug
 				ins.transform.localEulerAngles = new Vector3( 0.0f , 0.0f , 0.0f );
 				enemyArray_debug[ enemyIndex_debug ] = ins;	

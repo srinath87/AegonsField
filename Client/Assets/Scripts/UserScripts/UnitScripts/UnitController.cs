@@ -86,6 +86,7 @@ public class UnitController : MonoBehaviour {
 				{
 					animation.CrossFade("Idle");
 					currentState = UnitState.IDLE;
+					matchController.inAction = false;
 				}
 				break;
 			case UnitState.ATTACKING: 
@@ -93,7 +94,7 @@ public class UnitController : MonoBehaviour {
 				//Debug.Log( "HI" );
 				animation.CrossFade("Idle");
 				currentState = UnitState.IDLE;
-			
+				matchController.inAction = false;
 				break;
 			case UnitState.TAKEHIT: 
 				break;

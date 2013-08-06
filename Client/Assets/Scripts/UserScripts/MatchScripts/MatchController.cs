@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using AssemblyCSharp;
 
-public class MatchController : MonoBehaviour {
+public class MatchController : MonoBehaviour 
+{
 	
 	private int matchID;
 	public string playerName;
@@ -15,22 +16,52 @@ public class MatchController : MonoBehaviour {
 	private bool myTurn;
 	private bool facingRight;
 	private List<Action> actionsInTurn;
-	
+	private bool turnSubmitted;
+	private bool showSubmitButton;
+	public bool inAction;
+	private bool hasPendingAction;
+	private List<Action> pendingActions;
 	
 	// Use this for initialization
 	void Start () 
 	{
-		matchID = -1;
+		//matchID = -1;
 		opponentName = "";
-		playerName = "1";
+		//playerName = "1";
 		selectedUnit = null;
 		actionsLeft = 2;
 		myTurn = false;
 		actionsInTurn = new List<Action>();
+		pendingActions = new List<Action>();
+		turnSubmitted = false;
+		showSubmitButton = false;
+		inAction = false;
+		hasPendingAction = false;
 	}
 	
-	public void Update()
+	public void FixedUpdate()
 	{
+		if(myTurn && actionsLeft <=0 && !turnSubmitted && !showSubmitButton)
+		{
+			showSubmitButton = true;
+		}
+		if(!inAction && hasPendingAction)
+		{
+			Debug.Log(1);
+			if(this.pendingActions.Count <= 0)
+			{
+				Debug.Log(3);
+				Debug.Log(this.pendingActions.Count);
+				hasPendingAction = false;
+				StartTurn();
+			}
+			else
+			{
+				Debug.Log(2);
+				PerformPendingActions();
+			}
+				
+		}
 		//RaycastToMouseClick();
 		//TouchScreen();
 	}
@@ -49,8 +80,57 @@ public class MatchController : MonoBehaviour {
 		{
 			actionsLeft = 5;
 			actionsInTurn.Clear();
+		}	
+	}
+	
+	public void Init(int matchID, bool myTurn)
+	{
+		this.matchID = matchID;
+		this.myTurn = myTurn;
+		if(this.myTurn)
+		{
+			actionsLeft = 5;
+			actionsInTurn.Clear();
 		}
-		
+		else
+		{
+			actionsLeft = 0;
+			actionsInTurn.Clear();
+		}
+	}
+	
+	void OnGUI()
+	{
+		if(showSubmitButton)
+		{
+			if (GUI.Button (new Rect (10,10,150,100), "SubmitTurn")) 
+			{
+				GameObject gameController = GameObject.Find("GameController");
+				GameManager manager = gameController.GetComponent<GameManager>();
+				if(manager != null)
+				{
+					manager.SubmitTurn(actionsInTurn);
+					EndTurn();
+				}
+			}
+		}
+	}
+	
+	void EndTurn()
+	{
+		actionsInTurn.Clear();
+		myTurn = false;
+		showSubmitButton = false;
+		actionsLeft = 0;
+		turnSubmitted = true;
+	}
+	
+	void StartTurn()
+	{
+		myTurn = true;
+		showSubmitButton = false;
+		actionsLeft = 5;
+		turnSubmitted = false;
 	}
 	
 	void TouchScreen()
@@ -107,6 +187,7 @@ public class MatchController : MonoBehaviour {
 			UnitController controller = unitToMove.GetComponent<UnitController>();
 			if(controller != null)
 			{
+				inAction = true;
 				controller.SetState( 3 );
 				controller.SetTargetDestination( targetLocation );
 			}
@@ -153,6 +234,7 @@ public class MatchController : MonoBehaviour {
 				enemy.TakeDamage( player.damage , player.unitType );
 				enemy.animation.Play("Walk");
 				enemy.renderer.material.color = new Color( 1.0f , 0.0f , 0.0f , 0.5f );
+				inAction = true;
 				//--.
 					
 			//}
@@ -160,28 +242,60 @@ public class MatchController : MonoBehaviour {
 		
 	}
 	
+	public void SetPendingActions(List<Action> pendActions)
+	{
+		//Debug.Log(pendActions.Count);
+		this.pendingActions = new List<Action>(pendActions);
+		//Debug.Log(pendingActions.Count);
+		//this.pendingActions.Reverse();
+		//Debug.Log(pendingActions.Count);
+		hasPendingAction = true;
+	}
+	
 	public void PerformPendingActions()
 	{
+		//Debug.Log("In PerformPendingActions()");
 		if( myTurn )
 		{
 			return;
 		}
-		// Perform pending actions. 
-		// And set my turn.
-		myTurn = true;
-		actionsLeft = 5;
+		inAction = true;
+		int unitId, targetId;
+		Vector3 targetLocation;
+		Action currentAction = (pendingActions.ToArray())[0];
+		Actions act = currentAction.GetActionType();
+		switch(act)
+		{
+			case Actions.MOVE: 
+				unitId = currentAction.GetUnitID();
+				targetLocation = currentAction.GetTargetLocation();
+				PerformMoveAction(opponentName, unitId, targetLocation);
+				pendingActions.Remove(currentAction);
+				break;
+				
+			case Actions.ATTACK:
+				unitId = currentAction.GetUnitID();
+				targetId = currentAction.GetTargetId();
+				PerformAttackAction(opponentName, unitId, targetId);
+				pendingActions.Remove(currentAction);
+				break;
+		}
 	}
 		
 	public void PerformMoveAction( string owner , int unitId , Vector3 targetLocation )
 	{
-		MoveUnit( unitId , targetLocation );
-		
 		if( owner.Equals(playerName) )
 		{
-			//RecordAction( Enum actionType , string owner , int attackerId , int targetId, Vector3 targetLocation );
+			if(actionsLeft <= 0)
+			{
+				return;
+			}
+			RecordMoveAction(owner, unitId, targetLocation );
 			actionsLeft--;
 		}
+		MoveUnit( unitId , targetLocation );
 	}
+	
 	public void PerformMoveAction( Vector3 targetLocation )
 	{
 		PerformMoveAction(playerName, selectedUnit.GetComponent<UnitController>().GetUnitId(), targetLocation);
@@ -189,13 +303,16 @@ public class MatchController : MonoBehaviour {
 	
 	public void PerformAttackAction( string owner , int attackerId , int targetId )
 	{
-		AttackUnit( attackerId , targetId );
-		
-		if( owner == playerName )
+		if( owner.Equals(playerName) )
 		{
-			//RecordAction( Enum actionType , string owner , int attackerId , int targetId , Vector3 targetLocation );
+			if(actionsLeft <= 0)
+			{
+				return;
+			}
+			RecordAttackAction(owner, attackerId, targetId);
 			actionsLeft--;
 		}
+		AttackUnit( attackerId , targetId );
 	}
 	
 	public void PerformAttackAction( int targetId )
@@ -208,7 +325,7 @@ public class MatchController : MonoBehaviour {
 		Action newAction = new Action();
 		newAction.Init(1, unitId, targetLocation);
 		actionsInTurn.Add(newAction);
-		actionsLeft--;
+		//actionsLeft--;
 	}
 	
 	public void RecordAttackAction( string owner , int attackerId , int targetId )
@@ -216,7 +333,7 @@ public class MatchController : MonoBehaviour {
 		Action newAction = new Action();
 		newAction.Init(2, attackerId, targetId);
 		actionsInTurn.Add(newAction);
-		actionsLeft--;
+		//actionsLeft--;
 	}
 	
 	public void UnHighlightTiles()
@@ -243,7 +360,7 @@ public class MatchController : MonoBehaviour {
 		return playerName;
 	}
 	
-	public string GetOppenentNameName()
+	public string GetOppenentName()
 	{
 		return opponentName;
 	}
