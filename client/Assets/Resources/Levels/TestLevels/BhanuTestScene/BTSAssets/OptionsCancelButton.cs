@@ -1,7 +1,7 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
-public class OptionsMenuButton : UIButtonSound {
+public class OptionsCancelButton : UIButtonSound {
 
 	void Start () 
 	{
@@ -17,9 +17,6 @@ public class OptionsMenuButton : UIButtonSound {
 	{
 		if (enabled && trigger == Trigger.OnClick)
 		{
-			//GameObject OptionsPanel = GameObject.Find ("OptionsPanel");
-			//NGUITools.SetActive(OptionsPanel , false);
-			
 			Destroy((Object)GameObject.Find("OptionsScreen"));
 			Application.LoadLevel("MainMenuScreen");
 		}
