@@ -17,7 +17,7 @@ public class LoginButton : UIButtonSound {
 	{
 		if (enabled && trigger == Trigger.OnClick)
 		{
-			Destroy((Object)GameObject.Find("LogInScreen"));
+			//Destroy((Object)GameObject.Find("LogInScreen"));
 			Application.LoadLevel("LoadingScreen");
 		}
 	}
