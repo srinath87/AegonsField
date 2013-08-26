@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AvatarsBackButton : UIButtonSound {
+public class UniformColourButton : UIButtonSound {
 
 	void Start () 
 	{
@@ -17,9 +17,8 @@ public class AvatarsBackButton : UIButtonSound {
 	{
 		if (enabled && trigger == Trigger.OnClick)
 		{
-			Destroy((Object)GameObject.Find("AvatarsScreen"));
-			Application.LoadLevel("CustomizeScreen");
-			
+			Destroy((Object)GameObject.Find("TrainingScreen"));
+			Application.LoadLevel("UniformColourScreen");
 		}
 	}
 }
