@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class CustomizeMenuButton : UIButtonSound {
+public class MenuButton : UIButtonSound {
 
 	void Start () 
 	{
