@@ -29,7 +29,7 @@ public class MatchController : MonoBehaviour
 		opponentName = "";
 		//playerName = "1";
 		selectedUnit = null;
-		actionsLeft = 2;
+		actionsLeft = 200;
 		myTurn = false;
 		actionsInTurn = new List<Action>();
 		pendingActions = new List<Action>();
