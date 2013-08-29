@@ -1,7 +1,7 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
-public class PlayButton : UIButtonSound {
+public class SkipButton : UIButtonSound {
 
 	void Start () 
 	{
@@ -18,7 +18,7 @@ public class PlayButton : UIButtonSound {
 		if (enabled && trigger == Trigger.OnClick)
 		{
 			Destroy((Object)GameObject.Find("MainMenuScreen"));
-			Application.LoadLevel("FirstTimePlayScreen");
+			Application.LoadLevel("GameScreen");
 		}
 	}
 }
