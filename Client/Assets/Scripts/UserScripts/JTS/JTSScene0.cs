@@ -18,7 +18,7 @@ public class JTSScene0 : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		
-		startTiles();
+		//startTiles();
 		startPlayer();
 		startEnemy_debug(); // delete EVERYTHING with -debug
 		

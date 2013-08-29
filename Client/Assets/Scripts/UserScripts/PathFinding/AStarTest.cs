@@ -16,9 +16,9 @@ public class AStarTest : MonoBehaviour {
 	private bool _wasRender;
 	
 	private Camera _camera;	// Main Camera
-	private NodeState _nodeState; // TEMP Node States Component
-	private List<List<NodeState>> _nodeStatesGrid;
-	private List<NodeState> _nodeStatesList;
+	//private TileController _nodeState; // TEMP Node States Component
+	private List<List<TileController>> _nodeStatesGrid;
+	private List<TileController> _nodeStatesList;
 	
 	// ROOT PARENT for all GRID MAP of NODES (just for beauty structure)
 	private Transform _parentTransform;
@@ -29,7 +29,7 @@ public class AStarTest : MonoBehaviour {
 	private List<Transform> _tmpList; // TEMP List of Transforms
 	private NodeIndex _tmpNodeIndex; // TEMP NODE INDEX
 	
-	private string _numColsString = "7", _numRowsString = "7";
+	private string _numColsString = "10", _numRowsString = "5";
 	private int _numCols, _numRows, _tmpInt;
 	
 	private System.Int64 _timeFindPath; // Time for A* FindPath
@@ -45,7 +45,7 @@ public class AStarTest : MonoBehaviour {
 		AStar.OnPathFinded += HandleAStarOnPathFinded;
 		
 		_gridTransforms = new List<List<Transform>>();
-		_nodeStatesGrid = new List<List<NodeState>>();
+		_nodeStatesGrid = new List<List<TileController>>();
 		_parentTransforms = new List<Transform>();
 		
 		_numRows = int.Parse(_numRowsString);
@@ -84,7 +84,7 @@ public class AStarTest : MonoBehaviour {
 		_gridTransforms.Clear();
 		
 		// CLEAR NodeState's Lists
-		foreach (List<NodeState> list in _nodeStatesGrid) {
+		foreach (List<TileController> list in _nodeStatesGrid) {
 			list.Clear();
 		}
 		_nodeStatesGrid.Clear();
@@ -98,36 +98,38 @@ public class AStarTest : MonoBehaviour {
 		// GENERATE GRID_MAP_NODES
 		for (int i = 0; i < _numRows; i++) {
 			_tmpList = new List<Transform>();
-			_nodeStatesList = new List<NodeState>();
+			_nodeStatesList = new List<TileController>();
 			
 			// CREATE ROW PARENT just for BEAUTY STRUCTURE of GameObjects
 			GameObject parentGO = new GameObject("ROW_"+i.ToString());
 			parentGO.transform.parent = _parentTransform;
-			_parentTransforms.Insert(i, parentGO.transform);
+			//_parentTransforms.Insert(i, parentGO.transform);
 			
 			for (int j = 0; j < _numCols; j++) {
-				GameObject go = GameObject.Instantiate(nodePrefab) as GameObject;
+				//GameObject go = GameObject.Instantiate(nodePrefab) as GameObject;
+				GameObject go = ( GameObject )Instantiate( Resources.Load( "Levels/TestLevels/JasTestScene/JTS_Tile" ) );
+				//GameObject go = GameObject.Instantiate( Resources.Load( "Levels/TestLevels/JasTestScene/JTS_Tile" ) );
 				go.transform.name = go.transform.name.Replace(
 					"(Clone)", "["+i.ToString()+", "+j.ToString()+"]"
 				);
-				go.transform.parent = _parentTransforms[i];
-				go.transform.position = new Vector3(
-					j * go.transform.localScale.x * 1.25f,
-					-i * go.transform.localScale.y * 1.25f,
-					go.transform.position.z
-				);
+				//go.transform.parent = _parentTransforms[i];
+				go.transform.position = new Vector3( 10.0f + 1.0f * j , 0.0f , 8.0f + 1.0f * i );
+				
+				/*
+				go.transform.position = new Vector3( j * go.transform.localScale.x * 1.25f, -i * go.transform.localScale.y * 1.25f,	go.transform.position.z
+				);*/
 				_tmpList.Insert(j, go.transform);
-				_nodeStatesList.Insert(j, go.GetComponent<NodeState>());
+				_nodeStatesList.Insert(j, go.GetComponent<TileController>());
 			}
 			_gridTransforms.Insert(i, _tmpList);
 			_nodeStatesGrid.Insert(i, _nodeStatesList);
 		}
-		
+		/*
 		_parentTransform.Translate(new Vector3(
 			(-1) * (_numCols - 1) * 0.5f * nodePrefab.transform.localScale.x * 1.25f,
 			(_numRows - 1) * 0.5f * nodePrefab.transform.localScale.y * 1.25f,
 			0
-		));
+		));*/
 	}
 	
 	private void _Render() {
@@ -147,21 +149,26 @@ public class AStarTest : MonoBehaviour {
 			for (int j = 0; j < AStar.gridMap[i].Count; j++) {
 				// if Not WalkAble NODE [Set Red Material]
 				if (false == AStar.gridMap[i][j]) {
-					_SetMaterial(_gridTransforms[i][j].renderer, redMat);
+					//_SetMaterial(_gridTransforms[i][j].renderer, redMat);
+					_nodeStatesGrid[i][j].HighlightTile( "red" );
+					
 				} else if ( // else if START or END NODE [Set Blue Material]
 					AStar.startIndex.i == i && AStar.startIndex.j == j ||
 					AStar.endIndex.i == i && AStar.endIndex.j == j
 				) {
-					_SetMaterial(_gridTransforms[i][j].renderer, blueMat);
+					_nodeStatesGrid[i][j].HighlightTile( "blue" );
+					//_SetMaterial(_gridTransforms[i][j].renderer, blueMat);
 				} else {
 					_tmpNodeIndex = new NodeIndex();
 					_tmpNodeIndex.i = i;
 					_tmpNodeIndex.j = j;
 					// if PATH NODE [Set Green Material] else [Set White Material]
 					if (AStar.ContainsNodeIndex(AStar.pathNodes, _tmpNodeIndex)) {
-						_SetMaterial(_gridTransforms[i][j].renderer, greenMat);
+						_nodeStatesGrid[i][j].HighlightTile( "green" );
+						//_SetMaterial(_gridTransforms[i][j].renderer, greenMat);
 					} else {
-						_SetMaterial(_gridTransforms[i][j].renderer, whiteMat);
+						//_SetMaterial(_gridTransforms[i][j].renderer, whiteMat);
+						_nodeStatesGrid[i][j].HighlightTile( "white" );
 					}
 				}
 			}
@@ -202,26 +209,28 @@ public class AStarTest : MonoBehaviour {
 	}
 	
 	private void _ChangeNodeState(RaycastHit hit) {
-		_nodeState = hit.transform.gameObject.GetComponent<NodeState>();
-		switch (_nodeState.state) {
-			case NodeState.STATES.RED:
-				_nodeState.state = NodeState.STATES.BLUE;
-				_SetMaterial(_nodeState.renderer, blueMat);
-				break;
+		
+
+		
+		
+		TileController tc = hit.transform.gameObject.GetComponent<TileController>();
+		string t_colour_movement = "white";
+		
+		
+		switch( tc.col ){
 			
-			case NodeState.STATES.BLUE:
-				_nodeState.state = NodeState.STATES.WHITE;
-				_SetMaterial(_nodeState.renderer, whiteMat);
-				break;
+			case "white": t_colour_movement = "red"; break;
+			case "red": t_colour_movement = "blue"; break;
+			case "blue": t_colour_movement = "white"; break;
+			//case "white": t_colour_movement = "white"; break;
 			
-			case NodeState.STATES.WHITE:
-				_nodeState.state = NodeState.STATES.RED;
-				_SetMaterial(_nodeState.renderer, redMat);
-				break;
-			
-			default:
-				break;
 		}
+
+		tc.HighlightTile( t_colour_movement );
+		
+		
+		
+		
 	}
 	
 	private void _ClearAStarGridMap() {
@@ -250,7 +259,7 @@ public class AStarTest : MonoBehaviour {
 		for (int i = 0; i < _nodeStatesGrid.Count; i++) {
 			List<bool> boolList = new List<bool>();
 			for (int j = 0; j < _nodeStatesGrid[0].Count; j++) {
-				if (NodeState.STATES.BLUE == _nodeStatesGrid[i][j].state) {
+				if ("blue" == _nodeStatesGrid[i][j].col) {
 					if (++_tmpInt > 2) return;
 					
 					if (1 == _tmpInt) {
@@ -262,7 +271,7 @@ public class AStarTest : MonoBehaviour {
 					}
 					
 					boolList.Insert(j, true);
-				} else if (NodeState.STATES.RED == _nodeStatesGrid[i][j].state) {
+				} else if ("red" == _nodeStatesGrid[i][j].col) {
 					boolList.Insert(j, false);
 				} else { // WHITE or GREEN
 					boolList.Insert(j, true);

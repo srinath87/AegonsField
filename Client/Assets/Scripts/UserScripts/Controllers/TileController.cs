@@ -9,7 +9,7 @@ public class TileController : MonoBehaviour {
 	public int row = 0;
 	public int column = 0;
 	public MatchController matchController;
-	
+	public string col = "white";
 	// Use this for initialization
 	void Start () 
 	{
@@ -21,16 +21,17 @@ public class TileController : MonoBehaviour {
 	
 	public void HighlightTile( string colour_ )
 	{
+		
 		if ( !isOccupied )	
 		{
 			float t_alpha = 1.0f;
 			switch( colour_ )
 			{
 				
-				case "red":	renderer.material.color = new Color( 1.0f, 0.0f , 0.0f , t_alpha ); break;
-				case "blue": renderer.material.color = new Color( 0.0f, 0.0f , 1.0f , t_alpha ); break;
-				case "green": renderer.material.color = new Color( 0.0f, 1.0f , 0.0f , t_alpha ); break;
-				
+				case "red":	col = "red"; renderer.material.color = new Color( 1.0f, 0.0f , 0.0f , t_alpha ); break;
+				case "blue": col = "blue"; renderer.material.color = new Color( 0.0f, 0.0f , 1.0f , t_alpha ); break;
+				case "green": col = "green"; renderer.material.color = new Color( 0.0f, 1.0f , 0.0f , t_alpha ); break;
+				case "white": col = "white"; renderer.material.color = new Color( 1.0f, 1.0f , 1.0f , t_alpha ); break;
 			}
 			isHighlighted = true;
 		}	
@@ -38,8 +39,9 @@ public class TileController : MonoBehaviour {
 	
 	public void UnHighlightTile()
 	{
-		renderer.material.color = new Color( 1.0f , 1.0f , 1.0f , 0.0f );
+		renderer.material.color = new Color( 1.0f , 1.0f , 1.0f ,1.0f );
 		isHighlighted = false;	
+		col = "white";
 	}		
 	
 	
@@ -53,7 +55,7 @@ public class TileController : MonoBehaviour {
 				matchController.PerformMoveAction(gameObject.transform.position);
 			}
 		}
-		matchController.UnHighlightTiles();
+		//matchController.UnHighlightTiles();
 		matchController.SetSelectedUnit(null);
 	}
 	

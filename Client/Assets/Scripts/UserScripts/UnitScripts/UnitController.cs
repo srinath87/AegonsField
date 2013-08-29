@@ -54,15 +54,36 @@ public class UnitController : MonoBehaviour {
 		currentState = UnitState.CREATED;
 	}
 	
+	void HighlightAll()	{
+
+		/*
+		string t_colour_movement = "white";
+		
+		foreach(GameObject obj in tilesArray)
+		{
+			TileController tc = obj.GetComponent<TileController>();
+			//Debug.Log("tc.row = " + tc.row);
+			//Debug.Log("tc.column = " + tc.column);
+			tc.HighlightTile( t_colour_movement );		
+			
+			
+		}*/
+		
+	}
+	
 	// Update is called once per frame
 	void Update () 
 	{
+		
+		
+		
 		switch(currentState)
 		{
 			case UnitState.CREATED:	// Creation stuff if applicable;
 				SetState(2);
 				break;
 			case UnitState.IDLE: 
+				
 				break;
 			case UnitState.MOVING: 
 				//Debug.Log("Unit Moving");
@@ -70,7 +91,7 @@ public class UnitController : MonoBehaviour {
 				//Debug.Log(targetDestination.x);
 				//Debug.Log(transform.position.z);
 				//Debug.Log(targetDestination.z);
-			
+				HighlightAll();
 			
 		      	//animate walk
 				animation.Play("Walk");
@@ -216,6 +237,7 @@ public class UnitController : MonoBehaviour {
 		
 	public void HighlightMovementRange()
 	{
+		/*
 		onTileIndex = getTileIndexAtUnit();
 		TileController onTileController = onTileObj.GetComponent<TileController>();
 		
@@ -251,12 +273,13 @@ public class UnitController : MonoBehaviour {
 				tc.HighlightTile( t_colour_movement );
 			}
 			
-		}
+		}*/
 		
 	}
 	
 	public void HighlightAttackRange()
 	{
+		/*
 		// Later :)
 		onTileIndex = getTileIndexAtUnit();
 		TileController onTileController = onTileObj.GetComponent<TileController>();
@@ -325,8 +348,8 @@ public class UnitController : MonoBehaviour {
 			}
 			
 		}
+
 		*/
-		
 		
 	}
 	
