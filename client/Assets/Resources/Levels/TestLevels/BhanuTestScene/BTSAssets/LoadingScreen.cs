@@ -8,7 +8,7 @@ public class LoadingScreen : MonoBehaviour
 	
 	void Start () 
 	{
-		StartCoroutine("LoadScene" , "MainMenuScreen");
+		StartCoroutine("LoadScene" , SceneToLoad);
 	}
 	
 	
