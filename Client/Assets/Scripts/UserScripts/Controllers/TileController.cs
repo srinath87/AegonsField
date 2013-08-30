@@ -32,6 +32,8 @@ public class TileController : MonoBehaviour {
 				case "blue": col = "blue"; renderer.material.color = new Color( 0.0f, 0.0f , 1.0f , t_alpha ); break;
 				case "green": col = "green"; renderer.material.color = new Color( 0.0f, 1.0f , 0.0f , t_alpha ); break;
 				case "white": col = "white"; renderer.material.color = new Color( 1.0f, 1.0f , 1.0f , t_alpha ); break;
+				case "highlight": col = "white"; renderer.material.color = new Color( 1.0f, 1.0f , 0.0f , t_alpha ); break;
+				case "destination": col = "blue"; renderer.material.color = new Color( 1.0f, 1.0f , 0.0f , t_alpha ); break;
 			}
 			isHighlighted = true;
 		}	
@@ -50,10 +52,25 @@ public class TileController : MonoBehaviour {
 		//Debug.Log("Tile Tapped!");
 		if ( isHighlighted )	
 		{
-			if(matchController.GetSelectedUnit() != null)
-			{
-				matchController.PerformMoveAction(gameObject.transform.position);
+			
+			if ( isOccupied == false ){
+				HighlightTile( "destination" );
+				if(matchController.GetSelectedUnit() != null)
+				{
+					matchController.PerformMoveAction(gameObject.transform.position);
+				}
+					
+				/*
+				GameObject pObj_;
+				pObj_ = GameObject.FindWithTag("oAStar");
+				AStarTest AStar;
+				AStar = pObj_.GetComponent<AStarTest>();
+				AStar._FindPath();
+				*/
 			}
+			
+			
+
 		}
 		//matchController.UnHighlightTiles();
 		matchController.SetSelectedUnit(null);

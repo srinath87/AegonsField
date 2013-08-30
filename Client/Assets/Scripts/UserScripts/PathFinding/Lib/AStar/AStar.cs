@@ -72,6 +72,7 @@ public class AStar {
 	private static NodeIndex nodeIndex; // TEMP Node's Index
 	
 	private static int minF; // for searching MIN value
+	//private static int tim = 0;
 	
 	private static void Init() {
 		currentNode = null;
@@ -85,7 +86,7 @@ public class AStar {
 		removeNodeIndexes = new List<NodeIndex>();
 	}
 	
-	public static bool FindPath() {
+	public static bool FindPath( bool diag_ ) {
 		Init();
 		
 		if (!gridMap[startIndex.i][startIndex.j] || !gridMap[endIndex.i][endIndex.j]) {
@@ -101,10 +102,14 @@ public class AStar {
 		openList.Add(node);
 		
 		do {
-			FindLowestF();
-			closedList.Add(currentNode);
-			openList.Remove(currentNode);
-			CheckAdjacents();
+			//if ( tim < 1 ){
+				//tim = 100;
+				//Debug.Log( tim );
+				FindLowestF();
+				closedList.Add(currentNode);
+				openList.Remove(currentNode);
+				CheckAdjacents( diag_ );
+			//} else tim = tim - 1;
 		} while(
 			openList.Count > 0 && 
 			!ContainsNodeIndex(openList, endIndex)
@@ -142,53 +147,58 @@ public class AStar {
 		}
 	}
 	
-	private static void CheckAdjacents() {
+	private static void CheckAdjacents( bool diag_ ) {
 		nodeIndexes.Clear();
 		removeNodeIndexes.Clear();
 		
 		if (null == currentNode) {
 			return;
 		}
+
 		
 		nodeIndex = new NodeIndex();
 		nodeIndex.i = currentNode.nodeIndex.i - 1; // Up Row Adjacent Node
 		nodeIndex.j = currentNode.nodeIndex.j;		// Current Column Adjacent Node
 		nodeIndexes.Add(nodeIndex);
-		
+		if ( diag_ == true ){
 		nodeIndex = new NodeIndex();
 		nodeIndex.i = currentNode.nodeIndex.i - 1; // Up Row Adjacent Node
 		nodeIndex.j = currentNode.nodeIndex.j + 1;	// Right Column Adjacent Node
 		nodeIndexes.Add(nodeIndex);
-		
+
+		}
 		nodeIndex = new NodeIndex();
 		nodeIndex.i = currentNode.nodeIndex.i; 	// Current Row Adjacent Node
 		nodeIndex.j = currentNode.nodeIndex.j + 1;	// Right Column Adjacent Node
 		nodeIndexes.Add(nodeIndex);
-		
+		if ( diag_ == true ){
 		nodeIndex = new NodeIndex();
 		nodeIndex.i = currentNode.nodeIndex.i + 1; // Down Row Adjacent Node
 		nodeIndex.j = currentNode.nodeIndex.j + 1;	// Right Column Adjacent Node
 		nodeIndexes.Add(nodeIndex);
-		
+		}
 		nodeIndex = new NodeIndex();
 		nodeIndex.i = currentNode.nodeIndex.i + 1; // Down Row Adjacent Node
 		nodeIndex.j = currentNode.nodeIndex.j;		// Current Column Adjacent Node
 		nodeIndexes.Add(nodeIndex);
-		
+		if ( diag_ == true ){
 		nodeIndex = new NodeIndex();
 		nodeIndex.i = currentNode.nodeIndex.i + 1; // Down Row Adjacent Node
 		nodeIndex.j = currentNode.nodeIndex.j - 1;	// Left Column Adjacent Node
 		nodeIndexes.Add(nodeIndex);
-		
+		}
 		nodeIndex = new NodeIndex();
 		nodeIndex.i = currentNode.nodeIndex.i; 	// Current Row Adjacent Node
 		nodeIndex.j = currentNode.nodeIndex.j - 1;	// Left Column Adjacent Node
 		nodeIndexes.Add(nodeIndex);
-		
+		if ( diag_ == true ){
 		nodeIndex = new NodeIndex();
 		nodeIndex.i = currentNode.nodeIndex.i - 1; // Up Row Adjacent Node
 		nodeIndex.j = currentNode.nodeIndex.j - 1;	// Left Column Adjacent Node
 		nodeIndexes.Add(nodeIndex);
+		}
+		
+
 		
 		foreach (NodeIndex n in nodeIndexes) {
 			if (

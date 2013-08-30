@@ -298,8 +298,21 @@ public class MatchController : MonoBehaviour
 	
 	public void PerformMoveAction( Vector3 targetLocation )
 	{
+		//generate path and list before moving
+		GameObject pObj_;
+		pObj_ = GameObject.FindWithTag("oAStar");
+		AStarTest AStar;
+		AStar = pObj_.GetComponent<AStarTest>();
+		AStar._FindPath( selectedUnit.GetComponent<UnitController>().GetUnitDiag() );
+		selectedUnit.GetComponent<UnitController>().CopyMovementArray( AStar.GetVectorArray());
+		
 		PerformMoveAction(playerName, selectedUnit.GetComponent<UnitController>().GetUnitId(), targetLocation);
 	}
+	
+	
+	
+	
+	
 	
 	public void PerformAttackAction( string owner , int attackerId , int targetId )
 	{

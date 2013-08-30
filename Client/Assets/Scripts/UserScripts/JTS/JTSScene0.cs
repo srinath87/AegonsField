@@ -19,6 +19,14 @@ public class JTSScene0 : MonoBehaviour {
 	void Start () {
 		
 		//startTiles();
+		//Set max size.
+		tileSize = 50;
+		//Set index.
+		tileIndex = 0;
+		//Set array.
+		tileArray = new GameObject[ tileSize ];
+		
+		
 		startPlayer();
 		startEnemy_debug(); // delete EVERYTHING with -debug
 		
@@ -32,7 +40,7 @@ public class JTSScene0 : MonoBehaviour {
 	
 	
 	
-	
+	/*
 	void startTiles() {
 		
 		//Set max size.
@@ -46,10 +54,10 @@ public class JTSScene0 : MonoBehaviour {
 		//float terrain_height = 0.0f + Terrain.activeTerrain.SampleHeight( food.transform.position ); //ERROR, requires x and z to be set first.
 		
 		//Make tiles.
-		for (int i = 0; i < 10; i = i + 1){
-			for ( int j = 0; j < 5; j = j + 1 ){
+		for (int i = 0; i < 5; i = i + 1){
+			for ( int j = 0; j < 10; j = j + 1 ){
 				GameObject ins = ( GameObject )Instantiate( Resources.Load( "Levels/TestLevels/JasTestScene/JTS_Tile" ) );
-				ins.transform.position = new Vector3( 10.0f + 1.0f * i , 0.0f , 8.0f + 1.0f * j );
+				ins.transform.position = new Vector3( 10.0f + 1.0f * j , 0.0f , 8.0f + 1.0f * i );
 				ins.GetComponent<TileController>().column = i+1;
 				ins.GetComponent<TileController>().row = j+1;				
 				//Color colorStart = Color.white;
@@ -60,7 +68,7 @@ public class JTSScene0 : MonoBehaviour {
 			}
 		}
 		
-	}
+	}*/
 
 	void startPlayer() {
 		

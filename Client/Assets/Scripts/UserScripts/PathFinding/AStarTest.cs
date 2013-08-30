@@ -37,10 +37,26 @@ public class AStarTest : MonoBehaviour {
 	// GUI Window Rectangle
 	private Rect _windowRect = new Rect(0, 0, 150, 40);
 	
+	
+	
+	private JTSScene0 scene0Script;	
+	public List<Vector3> movementArray;// = new List<Vector3>();
+	
+	
+	
 	void Awake() {
 		wasGenerated = false;
 		_wasRender = false;
 		_timeFindPath = 0;
+		
+		//s
+		GameObject pObj_;
+		pObj_ = GameObject.FindWithTag("oScene0");
+		scene0Script = pObj_.GetComponent<JTSScene0>();
+		
+		
+		movementArray = new List<Vector3>();
+		
 		
 		AStar.OnPathFinded += HandleAStarOnPathFinded;
 		
@@ -57,6 +73,10 @@ public class AStarTest : MonoBehaviour {
 		GameObject go = new GameObject("GRID_MAP_NODES");
 		_parentTransform = go.transform;
 	}
+	
+	public List<Vector3> GetVectorArray(){
+		return movementArray;
+	}
 
 	void HandleAStarOnPathFinded (List<Node> path)
 	{
@@ -69,6 +89,7 @@ public class AStarTest : MonoBehaviour {
 		}
 		
 		_Render();
+
 	}
 	
 	private void _GenerateGrid() {
@@ -94,24 +115,33 @@ public class AStarTest : MonoBehaviour {
 			GameObject.Destroy(t.gameObject);
 		}
 		_parentTransforms.Clear();
-	
+		
 		// GENERATE GRID_MAP_NODES
 		for (int i = 0; i < _numRows; i++) {
 			_tmpList = new List<Transform>();
 			_nodeStatesList = new List<TileController>();
 			
 			// CREATE ROW PARENT just for BEAUTY STRUCTURE of GameObjects
-			GameObject parentGO = new GameObject("ROW_"+i.ToString());
-			parentGO.transform.parent = _parentTransform;
+			//GameObject parentGO = new GameObject("ROW_"+i.ToString());
+			//parentGO.transform.parent = _parentTransform;
 			//_parentTransforms.Insert(i, parentGO.transform);
 			
 			for (int j = 0; j < _numCols; j++) {
 				//GameObject go = GameObject.Instantiate(nodePrefab) as GameObject;
 				GameObject go = ( GameObject )Instantiate( Resources.Load( "Levels/TestLevels/JasTestScene/JTS_Tile" ) );
 				//GameObject go = GameObject.Instantiate( Resources.Load( "Levels/TestLevels/JasTestScene/JTS_Tile" ) );
+				
+				scene0Script.tileArray[ scene0Script.tileIndex ] = go;
+				scene0Script.tileIndex++;
+				Debug.Log ( scene0Script.tileIndex );
+				 // maybe useful dno
 				go.transform.name = go.transform.name.Replace(
 					"(Clone)", "["+i.ToString()+", "+j.ToString()+"]"
 				);
+				
+				go.GetComponent<TileController>().column = j+1;
+				go.GetComponent<TileController>().row = i+1;	
+				
 				//go.transform.parent = _parentTransforms[i];
 				go.transform.position = new Vector3( 10.0f + 1.0f * j , 0.0f , 8.0f + 1.0f * i );
 				
@@ -138,13 +168,14 @@ public class AStarTest : MonoBehaviour {
 		}
 		
 		if (null == AStar.gridMap || 0 == AStar.gridMap.Count || _wasRender) {
-			_RayCastNode();
+			//_RayCastNode();
 			return;
 		}
 		
 		_wasRender = true;
-		
+		//movementArrayIndex = 0;
 		// Set suitable Materials for All GRID_MAP's NODES
+		movementArray.Clear();
 		for (int i = 0; i < AStar.gridMap.Count; i++) {
 			for (int j = 0; j < AStar.gridMap[i].Count; j++) {
 				// if Not WalkAble NODE [Set Red Material]
@@ -157,6 +188,13 @@ public class AStarTest : MonoBehaviour {
 					AStar.endIndex.i == i && AStar.endIndex.j == j
 				) {
 					_nodeStatesGrid[i][j].HighlightTile( "blue" );
+					if ( _nodeStatesGrid[i][j] != null){
+							Vector3 tileVector = _nodeStatesGrid[i][j].transform.position;
+							//tileVector = new Vector3(tileVector.x , tileVector.y , tileVector.z );
+							//movementArray[ movementArray.Length ] = tileVector;
+							movementArray.Add ( tileVector );
+							
+					}
 					//_SetMaterial(_gridTransforms[i][j].renderer, blueMat);
 				} else {
 					_tmpNodeIndex = new NodeIndex();
@@ -165,6 +203,14 @@ public class AStarTest : MonoBehaviour {
 					// if PATH NODE [Set Green Material] else [Set White Material]
 					if (AStar.ContainsNodeIndex(AStar.pathNodes, _tmpNodeIndex)) {
 						_nodeStatesGrid[i][j].HighlightTile( "green" );
+						if ( _nodeStatesGrid[i][j] != null){
+							Vector3 tileVector = _nodeStatesGrid[i][j].transform.position;
+							//tileVector = new Vector3(tileVector.x , tileVector.y , tileVector.z );
+							//movementArray[ movementArray.Length ] = tileVector;
+							movementArray.Add ( tileVector );
+						}
+						
+						//Debug.Log("HI");
 						//_SetMaterial(_gridTransforms[i][j].renderer, greenMat);
 					} else {
 						//_SetMaterial(_gridTransforms[i][j].renderer, whiteMat);
@@ -174,12 +220,12 @@ public class AStarTest : MonoBehaviour {
 			}
 		}
 	}
-	
+	/*
 	private void _SetMaterial(Renderer r, Material m) {
 		if (r.sharedMaterial.color != m.color) {
 			r.sharedMaterial = m;
 		}
-	}
+	}*/
 	
 	private void _RayCastNode() {
 		if (Input.touchCount >= 1) {
@@ -233,7 +279,7 @@ public class AStarTest : MonoBehaviour {
 		
 	}
 	
-	private void _ClearAStarGridMap() {
+	public void _ClearAStarGridMap() {
 		if (null != AStar.gridMap) {
 			foreach (List<bool> list in AStar.gridMap) {
 				list.Clear();
@@ -244,7 +290,7 @@ public class AStarTest : MonoBehaviour {
 		}
 	}
 	
-	private void _FindPath() {
+	public void _FindPath( bool diag_ ) {
 		_ClearAStarGridMap();
 		
 		if (null == AStar.startIndex) {
@@ -271,10 +317,15 @@ public class AStarTest : MonoBehaviour {
 					}
 					
 					boolList.Insert(j, true);
+					//_nodeStatesGrid[i][j].HighlightTile( "blue" );
 				} else if ("red" == _nodeStatesGrid[i][j].col) {
 					boolList.Insert(j, false);
+					//_nodeStatesGrid[i][j].HighlightTile( "red" );
+					
+					
 				} else { // WHITE or GREEN
 					boolList.Insert(j, true);
+					//_nodeStatesGrid[i][j].HighlightTile( "green" );//
 				} 
 			}
 			AStar.gridMap.Insert(i, boolList);
@@ -285,14 +336,15 @@ public class AStarTest : MonoBehaviour {
 			return;
 		}
 		
-		_timeFindPath = System.DateTime.Now.Millisecond + System.DateTime.Now.Second * 1000;
+		//_timeFindPath = System.DateTime.Now.Millisecond + System.DateTime.Now.Second * 1000;
 		
 		AStar.heuristicType = astarMethodType;
-		AStar.FindPath();
+		AStar.FindPath( diag_ );
 		
-		_timeFindPath = System.DateTime.Now.Millisecond + System.DateTime.Now.Second * 1000 - _timeFindPath;
+		//_timeFindPath = System.DateTime.Now.Millisecond + System.DateTime.Now.Second * 1000 - _timeFindPath;
 	}
 	
+	/*
 	void OnGUI() {
 		_windowRect = GUILayout.Window (1, _windowRect, WindowCallback, "A* TEST");
 	}
@@ -327,5 +379,6 @@ public class AStarTest : MonoBehaviour {
 		}
 		
 		GUILayout.Label("MilliSeconds: " + _timeFindPath.ToString());
-	}
+	}*/
+	
 }

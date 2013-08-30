@@ -1,6 +1,6 @@
 using UnityEngine;
-using System.Collections;
-
+//using System.Collections;
+using System.Collections.Generic;
 public class UnitController : MonoBehaviour {
 	
 	public Vector3 rayHitPoint;
@@ -14,9 +14,12 @@ public class UnitController : MonoBehaviour {
 	public uint damage = 3;
 	public uint meleeArmour = 1;
 	public uint rangedArmour = 2;
-	public int moveRangeLR = 1;
-	public int moveRangeUD = 1;
-	public int moveRangeDiag = 1;
+	public int moveRangeLR = 3;
+	public int moveRangeUD = 3;
+	public int moveRangeDiag = 2;
+	
+	public bool unitDiag = false;
+	
 	public uint HitPoints = 10;
 	public float moveSpeed = 1f;
 	
@@ -35,6 +38,8 @@ public class UnitController : MonoBehaviour {
 	private GameObject[] tilesArray;
 	private GameObject[] enemyArray;
 	
+	private List<Vector3> movementArray;// = new List<Vector3>();
+
 	// Use this for initialization
 	void Start () 
 	{
@@ -46,6 +51,8 @@ public class UnitController : MonoBehaviour {
 		matchController = GameObject.Find("MatchControllerObj").GetComponent<MatchController>();
 		gameObject.tag = "Unit";
 		
+		movementArray = new List<Vector3>();
+		
 		GameObject pObj_;
 		pObj_ = GameObject.FindWithTag("oScene0");
 		scene0Script = pObj_.GetComponent<JTSScene0>();
@@ -53,6 +60,11 @@ public class UnitController : MonoBehaviour {
 		enemyArray = scene0Script.enemyArray_debug;
 		currentState = UnitState.CREATED;
 	}
+	
+	public void CopyMovementArray( List<Vector3> vector3array_ ){
+		movementArray = vector3array_;
+	}
+	
 	
 	void HighlightAll()	{
 
@@ -91,23 +103,38 @@ public class UnitController : MonoBehaviour {
 				//Debug.Log(targetDestination.x);
 				//Debug.Log(transform.position.z);
 				//Debug.Log(targetDestination.z);
-				HighlightAll();
+				//HighlightAll();
 			
 		      	//animate walk
 				animation.Play("Walk");
-			
+				//targetDestination = movementArray[ movementArrayIndex ];
 				// Smoothly rotates towards target 
-				setUnitRotation( targetDestination );
+				setUnitRotation( targetDestination ); 
+				Vector3 NextPositionDestination = movementArray[ movementArray.Count - 1 ];
+				if(transform.position.x != NextPositionDestination.x || transform.position.z != NextPositionDestination.z)
+				{				
+					transform.position = Vector3.MoveTowards(transform.position, new Vector3(NextPositionDestination.x, transform.position.y, NextPositionDestination.z), Time.deltaTime * moveSpeed);
+			}
+				else {  movementArray.RemoveAt( movementArray.Count - 1  ); }
 			
 				if(transform.position.x != targetDestination.x || transform.position.z != targetDestination.z)
 				{
-					transform.position = Vector3.MoveTowards(transform.position, new Vector3(targetDestination.x, transform.position.y, targetDestination.z), Time.deltaTime * moveSpeed);
+					//transform.position = Vector3.MoveTowards(transform.position, new Vector3(targetDestination.x, transform.position.y, targetDestination.z), Time.deltaTime * moveSpeed);
 				}
 				else
 				{
 					animation.CrossFade("Idle");
 					currentState = UnitState.IDLE;
 					matchController.inAction = false;
+					movementArray.Clear();
+
+					GameObject pObj_;
+					pObj_ = GameObject.FindWithTag("oAStar");
+					AStarTest AStar;
+					AStar = pObj_.GetComponent<AStarTest>();
+					AStar.movementArray.Clear();
+					AStar._ClearAStarGridMap();
+					matchController.UnHighlightTiles();
 				}
 				break;
 			case UnitState.ATTACKING: 
@@ -177,7 +204,11 @@ public class UnitController : MonoBehaviour {
 		}
 		
 	}
-
+	
+	public bool GetUnitDiag()
+	{
+		return unitDiag;
+	}
 	
 	public int GetUnitId()
 	{
@@ -237,14 +268,15 @@ public class UnitController : MonoBehaviour {
 		
 	public void HighlightMovementRange()
 	{
-		/*
+		
 		onTileIndex = getTileIndexAtUnit();
 		TileController onTileController = onTileObj.GetComponent<TileController>();
+		
 		
 		//Debug.Log("onTileController.row = " + onTileController.row);
 		//Debug.Log("onTileController.column = " + onTileController.column);
 		
-		string t_colour_movement = "green";
+		string t_colour_movement = "highlight";
 		
 		foreach(GameObject obj in tilesArray)
 		{
@@ -273,7 +305,8 @@ public class UnitController : MonoBehaviour {
 				tc.HighlightTile( t_colour_movement );
 			}
 			
-		}*/
+		}
+		onTileController.HighlightTile( "blue" );
 		
 	}
 	
