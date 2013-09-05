@@ -109,17 +109,28 @@ public class UnitController : MonoBehaviour {
 				animation.Play("Walk");
 				//targetDestination = movementArray[ movementArrayIndex ];
 				// Smoothly rotates towards target 
-				setUnitRotation( targetDestination ); 
-				Vector3 NextPositionDestination = movementArray[ movementArray.Count - 1 ];
-				if(transform.position.x != NextPositionDestination.x || transform.position.z != NextPositionDestination.z)
-				{				
-					transform.position = Vector3.MoveTowards(transform.position, new Vector3(NextPositionDestination.x, transform.position.y, NextPositionDestination.z), Time.deltaTime * moveSpeed);
-			}
-				else {  movementArray.RemoveAt( movementArray.Count - 1  ); }
 			
+				setUnitRotation( targetDestination ); 
+			
+			
+			
+				
+				if ( movementArray.Count > 0 ){
+					Vector3 NextPositionDestination = movementArray[ movementArray.Count - 1 ];
+					if(transform.position.x != NextPositionDestination.x || transform.position.z != NextPositionDestination.z)
+					{				
+						transform.position = Vector3.MoveTowards(transform.position, new Vector3(NextPositionDestination.x, transform.position.y, NextPositionDestination.z), Time.deltaTime * moveSpeed);
+					}
+					else 
+					{  
+						movementArray.RemoveAt( movementArray.Count - 1  ); 
+					}
+			
+				}
+				else
 				if(transform.position.x != targetDestination.x || transform.position.z != targetDestination.z)
 				{
-					//transform.position = Vector3.MoveTowards(transform.position, new Vector3(targetDestination.x, transform.position.y, targetDestination.z), Time.deltaTime * moveSpeed);
+					transform.position = Vector3.MoveTowards(transform.position, new Vector3(targetDestination.x, transform.position.y, targetDestination.z), Time.deltaTime * moveSpeed);
 				}
 				else
 				{

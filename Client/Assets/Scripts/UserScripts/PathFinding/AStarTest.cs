@@ -192,7 +192,7 @@ public class AStarTest : MonoBehaviour {
 							Vector3 tileVector = _nodeStatesGrid[i][j].transform.position;
 							//tileVector = new Vector3(tileVector.x , tileVector.y , tileVector.z );
 							//movementArray[ movementArray.Length ] = tileVector;
-							movementArray.Add ( tileVector );
+							//movementArray.Add ( tileVector );
 							
 					}
 					//_SetMaterial(_gridTransforms[i][j].renderer, blueMat);
@@ -280,6 +280,7 @@ public class AStarTest : MonoBehaviour {
 	}
 	
 	public void _ClearAStarGridMap() {
+		_wasRender = false;
 		if (null != AStar.gridMap) {
 			foreach (List<bool> list in AStar.gridMap) {
 				list.Clear();
