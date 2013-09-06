@@ -136,14 +136,14 @@ public class AStarTest : MonoBehaviour {
 				Debug.Log ( scene0Script.tileIndex );
 				 // maybe useful dno
 				go.transform.name = go.transform.name.Replace(
-					"(Clone)", "["+i.ToString()+", "+j.ToString()+"]"
+					"(Clone)", "["+j.ToString()+", "+i.ToString()+"]"
 				);
 				
-				go.GetComponent<TileController>().column = j+1;
-				go.GetComponent<TileController>().row = i+1;	
+				go.GetComponent<TileController>().column = i+1;
+				go.GetComponent<TileController>().row = j+1;	
 				
 				//go.transform.parent = _parentTransforms[i];
-				go.transform.position = new Vector3( 10.0f + 1.0f * j , 0.0f , 8.0f + 1.0f * i );
+				go.transform.position = new Vector3( 10.0f + 1.0f * j , 0.0f , 12.0f - 1.0f * i );
 				
 				/*
 				go.transform.position = new Vector3( j * go.transform.localScale.x * 1.25f, -i * go.transform.localScale.y * 1.25f,	go.transform.position.z

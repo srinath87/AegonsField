@@ -14,9 +14,9 @@ public class UnitController : MonoBehaviour {
 	public uint damage = 3;
 	public uint meleeArmour = 1;
 	public uint rangedArmour = 2;
-	public int moveRangeLR = 3;
-	public int moveRangeUD = 3;
-	public int moveRangeDiag = 2;
+	public int moveRangeLR = 1;
+	public int moveRangeUD = 1;
+	public int moveRangeDiag;
 	
 	public bool unitDiag = false;
 	
@@ -43,6 +43,10 @@ public class UnitController : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
 	{
+		if ( unitDiag == false )
+		moveRangeDiag = moveRangeLR - ( moveRangeLR - 1 );
+		else moveRangeDiag = moveRangeLR;
+		
 		rayHitPoint = new Vector3( 0.0f , 0.0f , 0.0f );
 		onTileIndex = 0;//maybe scan tile array at start ?
 		//renderer.material.color = new Color( 1 , 1 , 1 , 0.5f );
@@ -276,48 +280,133 @@ public class UnitController : MonoBehaviour {
 	{
 		return Mathf.Sqrt( ( ( u1 - v1 ) * ( u1 - v1 ) ) + ( ( u2 - v2 ) * ( u2 - v2 ) ) );
 	}
+	
+	public GameObject getTileCR( int column_ , int row_ ){
+	
+		foreach(GameObject obj in tilesArray)
+		{
+			TileController tc = obj.GetComponent<TileController>();	
+			if ( tc.column == column_ && tc.row == row_ ){
+				return obj;
+			}
+		}
+		return null;
+		
+	}
 		
 	public void HighlightMovementRange()
 	{
 		
+		
+		
 		onTileIndex = getTileIndexAtUnit();
-		TileController onTileController = onTileObj.GetComponent<TileController>();
+		TileController onTileController;
+		onTileController = onTileObj.GetComponent<TileController>();
+		string t_colour_movement = "highlight";
+		
+		if ( unitDiag == true )
+		{
+			foreach(GameObject obj in tilesArray)
+			{
+				TileController tc = obj.GetComponent<TileController>();
+				
+				if ( tc.column <= onTileController.column + moveRangeLR )
+				if ( tc.column >= onTileController.column - moveRangeLR )
+				if ( tc.row <= onTileController.row + moveRangeLR )
+				if ( tc.row >= onTileController.row - moveRangeLR )
+				tc.HighlightTile( t_colour_movement );				
+			}
+			
+			onTileController.HighlightTile( "blue" );
+		}
+		else
+		{
+			
+			
+			
+			
+			
+			foreach(GameObject obj in tilesArray)
+			{
+				TileController tc = obj.GetComponent<TileController>();
+
+				
+				
+				
+				int p_f = onTileController.column + onTileController.row;
+				int t_f = tc.column + tc.row;
+				
+				if ( tc.column >= onTileController.column && tc.row >= onTileController.row )
+				{
+					int f = t_f - p_f;
+					if ( f <= moveRangeLR && f >= -moveRangeLR )
+					
+					tc.HighlightTile( t_colour_movement );	
+				}
+				else
+				if ( tc.column <= onTileController.column && tc.row <= onTileController.row )
+				{
+					int f = t_f - p_f;
+					if ( f <= moveRangeLR && f >= -moveRangeLR )
+					
+					tc.HighlightTile( t_colour_movement );	
+				}
+				else
+				{
+					
+					p_f = onTileController.column - onTileController.row;
+					t_f = tc.column - tc.row;
+					int f = t_f - p_f;
+					if ( f <= moveRangeLR && f >= -moveRangeLR )
+					
+					tc.HighlightTile( t_colour_movement );	
+					
+					
+				}
+				//if ( tc.column <= onTileController.column + moveRangeLR )
+				//if ( tc.column >= onTileController.column - moveRangeLR )
+				//if ( tc.row <= onTileController.row + moveRangeLR )
+				//if ( tc.row >= onTileController.row - moveRangeLR )
+							
+			}
+			
+			onTileController.HighlightTile( "blue" );		
+		}
+
+			
+			
+			
 		
 		
-		//Debug.Log("onTileController.row = " + onTileController.row);
-		//Debug.Log("onTileController.column = " + onTileController.column);
+		/*
+		onTileController = onTileObj.GetComponent<TileController>();
+		onTileObj = getTileCR ( onTileController.column - moveRangeLR , onTileController.row - moveRangeLR );
+		
+		onTileController = onTileObj.GetComponent<TileController>();
+		
+
 		
 		string t_colour_movement = "highlight";
 		
-		foreach(GameObject obj in tilesArray)
-		{
-			TileController tc = obj.GetComponent<TileController>();
-			//Debug.Log("tc.row = " + tc.row);
-			//Debug.Log("tc.column = " + tc.column);
-					
+		int i , j;
+		int d = moveRangeLR * 2;
+		
+		for ( i = onTileController.column; i < ( 1 + onTileController.column + d ); ++i ){ 
+			for ( j = onTileController.row; j < ( 1 + onTileController.row + d ); ++j ){ 
+				
+				GameObject t = getTileCR( i , j );
+				if ( t != null ){
+					TileController tscr = t.GetComponent<TileController>();;
+					tscr.HighlightTile( t_colour_movement );
+				}
+			}	
 			
-			if( ( (tc.column <= onTileController.column + moveRangeLR) && (tc.column >= onTileController.column - moveRangeLR) ) && (tc.row == onTileController.row) )
-			{
-				tc.HighlightTile( t_colour_movement );
-			}
-			
-			if( ( (tc.row <= onTileController.row + moveRangeUD) && (tc.row >= onTileController.row - moveRangeUD) ) && (tc.column == onTileController.column) )
-			{
-				tc.HighlightTile( t_colour_movement );
-			}
-			
-			if( ( (tc.row <= onTileController.row + moveRangeDiag) && (tc.row > onTileController.row) )&& ( (tc.column <= onTileController.column + moveRangeDiag) && (tc.column >= onTileController.column - moveRangeDiag) && (tc.column != onTileController.column) ) )
-			{
-				tc.HighlightTile( t_colour_movement );
-			}
-			
-			if( ( (tc.row >= onTileController.row - moveRangeDiag) && (tc.row < onTileController.row) ) && ( (tc.column <= onTileController.column + moveRangeDiag) && (tc.column >= onTileController.column - moveRangeDiag) && (tc.column != onTileController.column) ) )
-			{
-				tc.HighlightTile( t_colour_movement );
-			}
-			
-		}
-		onTileController.HighlightTile( "blue" );
+		}*/
+		
+		//highlight start point
+		//onTileObj = getTileCR ( onTileController.column + moveRangeLR , onTileController.row + moveRangeLR );
+		//onTileController = onTileObj.GetComponent<TileController>();
+
 		
 	}
 	
