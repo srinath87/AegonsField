@@ -308,6 +308,10 @@ public class UnitController : MonoBehaviour {
 		{
 			foreach(GameObject obj in tilesArray)
 			{
+				if(obj == null)
+				{
+					continue;
+				}
 				TileController tc = obj.GetComponent<TileController>();
 				
 				if ( tc.column <= onTileController.column + moveRangeLR )
@@ -321,13 +325,13 @@ public class UnitController : MonoBehaviour {
 		}
 		else
 		{
-			
-			
-			
-			
-			
+				
 			foreach(GameObject obj in tilesArray)
 			{
+				if(obj == null)
+				{
+					continue;
+				}
 				TileController tc = obj.GetComponent<TileController>();
 
 				
