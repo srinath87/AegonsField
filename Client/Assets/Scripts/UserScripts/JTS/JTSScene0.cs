@@ -110,7 +110,7 @@ public class JTSScene0 : MonoBehaviour {
 		for (int i = 0; i < 1; i = i + 1){
 			for ( int j = 0; j < 1; j = j + 1 ){
 				GameObject ins = ( GameObject )Instantiate( Resources.Load( "Common/Units/PF_Swordsman" ) );
-				ins.transform.position = new Vector3( 0 + 1 * ( j + 2 ), 0.08f , 0  );
+				ins.transform.position = new Vector3( 2.8f, 0.08f , 0  );
 				ins.AddComponent("UnitController");
 				ins.GetComponent<UnitController>().unitOwner = "player2"; //set to be controlled by 'other'
 				ins.GetComponent<UnitController>().unitID = 2; //debug
