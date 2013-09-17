@@ -14,8 +14,8 @@ public class UnitController : MonoBehaviour {
 	public uint damage = 3;
 	public uint meleeArmour = 1;
 	public uint rangedArmour = 2;
-	public int moveRangeLR = 3;
-	public int moveRangeUD = 3;
+	public int moveRangeLR = 5;
+	public int moveRangeUD = 5;
 	public int moveRangeDiag = 2;
 	
 	public bool unitDiag = false;
@@ -39,7 +39,11 @@ public class UnitController : MonoBehaviour {
 	private GameObject[] enemyArray;
 	
 	private List<Vector3> movementArray;// = new List<Vector3>();
-
+	
+	// GUI Window Rectangle
+	private Rect _windowRect = new Rect(0, 0, 150, 40);
+	private string _numColsString = "10", _numRowsString = "5";
+	
 	// Use this for initialization
 	void Start () 
 	{
@@ -64,6 +68,7 @@ public class UnitController : MonoBehaviour {
 	public void CopyMovementArray( List<Vector3> vector3array_ ){
 		movementArray = vector3array_;
 	}
+
 	
 	
 	void HighlightAll()	{
@@ -110,16 +115,19 @@ public class UnitController : MonoBehaviour {
 				//targetDestination = movementArray[ movementArrayIndex ];
 				// Smoothly rotates towards target 
 				setUnitRotation( targetDestination ); 
-				Vector3 NextPositionDestination = movementArray[ movementArray.Count - 1 ];
+				Vector3 NextPositionDestination;
+				if ( movementArray.Count > 1 ){
+				NextPositionDestination = movementArray[ movementArray.Count - 1 ];
+				}
+				else NextPositionDestination = transform.position;
+			
 				if(transform.position.x != NextPositionDestination.x || transform.position.z != NextPositionDestination.z)
 				{				
 					transform.position = Vector3.MoveTowards(transform.position, new Vector3(NextPositionDestination.x, transform.position.y, NextPositionDestination.z), Time.deltaTime * moveSpeed);
-			}
-				else {  movementArray.RemoveAt( movementArray.Count - 1  ); }
-			
-				if(transform.position.x != targetDestination.x || transform.position.z != targetDestination.z)
-				{
-					//transform.position = Vector3.MoveTowards(transform.position, new Vector3(targetDestination.x, transform.position.y, targetDestination.z), Time.deltaTime * moveSpeed);
+				}
+				else if ( movementArray.Count > 1 ){
+					movementArray.RemoveAt( movementArray.Count - 1 );
+					
 				}
 				else
 				{
