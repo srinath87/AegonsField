@@ -83,7 +83,8 @@ public class JTSScene0 : MonoBehaviour {
 		for (int i = 0; i < 1; i = i + 1){
 			for ( int j = 0; j < 1; j = j + 1 ){
 				GameObject ins = ( GameObject )Instantiate( Resources.Load( "Common/Units/PF_Swordsman" ) );
-				ins.transform.position = new Vector3( 11.0f + 1.0f * i , 0.5f , 11.0f + 1.0f * j );
+				ins.transform.position = new Vector3( 0 + 1 * i, 0.08f , 0 );
+				//go.transform.position = new Vector3( -5.4f + 1.35f * j , 0.08f , 2.8f - 1.4f * i );
 				ins.AddComponent("UnitController");
 				ins.transform.localEulerAngles = new Vector3( 0.0f , 180.0f , 0.0f );
 				ins.GetComponent<UnitController>().unitOwner = "player1";
@@ -109,7 +110,7 @@ public class JTSScene0 : MonoBehaviour {
 		for (int i = 0; i < 1; i = i + 1){
 			for ( int j = 0; j < 1; j = j + 1 ){
 				GameObject ins = ( GameObject )Instantiate( Resources.Load( "Common/Units/PF_Swordsman" ) );
-				ins.transform.position = new Vector3( 15.0f + 1.0f * i , 0.5f , 11.0f + 1.0f * j );
+				ins.transform.position = new Vector3( 0 + 1 * ( j + 2 ), 0.08f , 0  );
 				ins.AddComponent("UnitController");
 				ins.GetComponent<UnitController>().unitOwner = "player2"; //set to be controlled by 'other'
 				ins.GetComponent<UnitController>().unitID = 2; //debug

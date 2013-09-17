@@ -29,7 +29,7 @@ public class AStarTest : MonoBehaviour {
 	private List<Transform> _tmpList; // TEMP List of Transforms
 	private NodeIndex _tmpNodeIndex; // TEMP NODE INDEX
 	
-	private string _numColsString = "10", _numRowsString = "5";
+	private string _numColsString = "9", _numRowsString = "5";
 	private int _numCols, _numRows, _tmpInt;
 	
 	private System.Int64 _timeFindPath; // Time for A* FindPath
@@ -133,7 +133,7 @@ public class AStarTest : MonoBehaviour {
 				
 				scene0Script.tileArray[ scene0Script.tileIndex ] = go;
 				scene0Script.tileIndex++;
-				//Debug.Log ( scene0Script.tileIndex );
+				Debug.Log ( scene0Script.tileIndex );
 				 // maybe useful dno
 				go.transform.name = go.transform.name.Replace(
 					"(Clone)", "["+j.ToString()+", "+i.ToString()+"]"
@@ -143,7 +143,7 @@ public class AStarTest : MonoBehaviour {
 				go.GetComponent<TileController>().row = j+1;	
 				
 				//go.transform.parent = _parentTransforms[i];
-				go.transform.position = new Vector3( 10.0f + 1.0f * j , 0.0f , 12.0f - 1.0f * i );
+				go.transform.position = new Vector3( -5.372f + 1.35f * j , 0.08f , 2.8f - 1.4f * i );
 				
 				/*
 				go.transform.position = new Vector3( j * go.transform.localScale.x * 1.25f, -i * go.transform.localScale.y * 1.25f,	go.transform.position.z
@@ -176,37 +176,8 @@ public class AStarTest : MonoBehaviour {
 		//movementArrayIndex = 0;
 		// Set suitable Materials for All GRID_MAP's NODES
 		movementArray.Clear();
-		
-		int i , j;
-		int a = 0;
-		for (i = 0; i < AStar.gridMap.Count; i++) {
-			for (j = 0; j < AStar.gridMap[i].Count; j++) {
-				if ( // else if START or END NODE [Set Blue Material]
-					AStar.startIndex.i == i && AStar.startIndex.j == j ||
-					AStar.endIndex.i == i && AStar.endIndex.j == j
-				) {
-					a++;
-					_nodeStatesGrid[i][j].HighlightTile( "blue" );
-					if ( _nodeStatesGrid[i][j] != null){
-							Vector3 tileVector = _nodeStatesGrid[i][j].transform.position;
-							//tileVector = new Vector3(tileVector.x , tileVector.y , tileVector.z );
-							//movementArray[ movementArray.Length ] = tileVector;
-<<<<<<< HEAD
-							if ( a < 2 ) { movementArray.Add ( tileVector ); }
-=======
-							//movementArray.Add ( tileVector );
->>>>>>> f7060d553739bce1804f68c3f6336cb79e8d20a7
-							
-					}
-					//_SetMaterial(_gridTransforms[i][j].renderer, blueMat);
-				} 
-				}
-			}
-				
-		
-		
-		for (i = 0; i < AStar.gridMap.Count; i++) {
-			for (j = 0; j < AStar.gridMap[i].Count; j++) {
+		for (int i = 0; i < AStar.gridMap.Count; i++) {
+			for (int j = 0; j < AStar.gridMap[i].Count; j++) {
 				// if Not WalkAble NODE [Set Red Material]
 				if (false == AStar.gridMap[i][j]) {
 					//_SetMaterial(_gridTransforms[i][j].renderer, redMat);
@@ -216,7 +187,15 @@ public class AStarTest : MonoBehaviour {
 					AStar.startIndex.i == i && AStar.startIndex.j == j ||
 					AStar.endIndex.i == i && AStar.endIndex.j == j
 				) {
-					//ignore blue
+					_nodeStatesGrid[i][j].HighlightTile( "blue" );
+					if ( _nodeStatesGrid[i][j] != null){
+							Vector3 tileVector = _nodeStatesGrid[i][j].transform.position;
+							//tileVector = new Vector3(tileVector.x , tileVector.y , tileVector.z );
+							//movementArray[ movementArray.Length ] = tileVector;
+							//movementArray.Add ( tileVector );
+							
+					}
+					//_SetMaterial(_gridTransforms[i][j].renderer, blueMat);
 				} else {
 					_tmpNodeIndex = new NodeIndex();
 					_tmpNodeIndex.i = i;

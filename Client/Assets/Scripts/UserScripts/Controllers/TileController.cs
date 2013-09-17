@@ -31,9 +31,9 @@ public class TileController : MonoBehaviour {
 				case "red":	col = "red"; renderer.material.color = new Color( 1.0f, 0.0f , 0.0f , t_alpha ); break;
 				case "blue": col = "blue"; renderer.material.color = new Color( 0.0f, 0.0f , 1.0f , t_alpha ); break;
 				case "green": col = "green"; renderer.material.color = new Color( 0.0f, 1.0f , 0.0f , t_alpha ); break;
-				case "white": col = "white"; renderer.material.color = new Color( 1.0f, 1.0f , 1.0f , t_alpha ); break;
-				case "highlight": col = "white"; renderer.material.color = new Color( 1.0f, 1.0f , 0.0f , t_alpha ); break;
-				case "destination": col = "blue"; renderer.material.color = new Color( 1.0f, 1.0f , 0.0f , t_alpha ); break;
+				case "white": col = "white"; renderer.material.color = new Color( 1.0f, 1.0f , 1.0f , 0.0f ); break;
+				case "highlight": col = "white"; renderer.material.color = new Color( 0.2f, 1.0f , 0.2f , 0.5f ); break;
+				case "destination": col = "blue"; renderer.material.color = new Color( 0.2f, 1.0f , 0.2f , 0.7f ); break;
 			}
 			isHighlighted = true;
 		}	
@@ -41,7 +41,7 @@ public class TileController : MonoBehaviour {
 	
 	public void UnHighlightTile()
 	{
-		renderer.material.color = new Color( 1.0f , 1.0f , 1.0f ,1.0f );
+		renderer.material.color = new Color( 1.0f , 1.0f , 1.0f ,0.0f );
 		isHighlighted = false;	
 		col = "white";
 	}		
