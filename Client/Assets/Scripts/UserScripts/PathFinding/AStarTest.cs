@@ -136,14 +136,14 @@ public class AStarTest : MonoBehaviour {
 				//Debug.Log ( scene0Script.tileIndex );
 				 // maybe useful dno
 				go.transform.name = go.transform.name.Replace(
-					"(Clone)", "["+i.ToString()+", "+j.ToString()+"]"
+					"(Clone)", "["+j.ToString()+", "+i.ToString()+"]"
 				);
 				
-				go.GetComponent<TileController>().column = j+1;
-				go.GetComponent<TileController>().row = i+1;	
+				go.GetComponent<TileController>().column = i+1;
+				go.GetComponent<TileController>().row = j+1;	
 				
 				//go.transform.parent = _parentTransforms[i];
-				go.transform.position = new Vector3( 10.0f + 1.0f * j , 0.0f , 8.0f + 1.0f * i );
+				go.transform.position = new Vector3( 10.0f + 1.0f * j , 0.0f , 12.0f - 1.0f * i );
 				
 				/*
 				go.transform.position = new Vector3( j * go.transform.localScale.x * 1.25f, -i * go.transform.localScale.y * 1.25f,	go.transform.position.z
@@ -191,7 +191,11 @@ public class AStarTest : MonoBehaviour {
 							Vector3 tileVector = _nodeStatesGrid[i][j].transform.position;
 							//tileVector = new Vector3(tileVector.x , tileVector.y , tileVector.z );
 							//movementArray[ movementArray.Length ] = tileVector;
+<<<<<<< HEAD
 							if ( a < 2 ) { movementArray.Add ( tileVector ); }
+=======
+							//movementArray.Add ( tileVector );
+>>>>>>> f7060d553739bce1804f68c3f6336cb79e8d20a7
 							
 					}
 					//_SetMaterial(_gridTransforms[i][j].renderer, blueMat);
