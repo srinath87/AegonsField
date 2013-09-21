@@ -150,13 +150,36 @@ public class MatchController : MonoBehaviour
 						return;
 					}
 			 	}
-				foreach(RaycastHit hit in hits) 
-				{
-					if(hit.transform.gameObject.CompareTag("oTile"))
-					{
-						hit.transform.gameObject.SendMessage("OnMouseDown");
-						return;
-					}
+				
+				for( int j = 0; j < hits.Length; ++j ){
+				RaycastHit hit = hits[ j ];
+				//foreach(RaycastHit hit in hits) 
+				//{
+					var layerMask = 1 << 8;
+					layerMask = ~layerMask;
+
+					//if (Physics.Raycast (transform.position,transform.TransformDirection (Vector3.forward),out hit, Mathf.Infinity, layerMask)) {
+
+						if(hit.transform.gameObject.CompareTag("oTile"))
+						{
+							hit.transform.gameObject.SendMessage("OnMouseDown");
+							return;
+						}
+						else
+						if(hit.transform.gameObject.CompareTag("oCard"))
+						{
+							GameObject objCard;
+							objCard = hit.transform.gameObject;
+							CardController script = objCard.GetComponent<CardController>();
+						
+							uint g = 0;
+							script.OnMouseDown( g );
+							
+							//hit.transform.gameObject.SendMessage("OnMouseDown");
+						
+							return;
+						}
+					//}
 			 	}
 		   }
 	   }
