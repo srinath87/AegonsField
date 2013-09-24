@@ -63,7 +63,7 @@ public class MatchController : MonoBehaviour
 				
 		}
 		//RaycastToMouseClick();
-		//TouchScreen();
+		TouchScreen();
 	}
 	
 	public void Init(int matchID, string playerName, string playerTeam, string opponentName, string opponentTeam, bool facingRight, bool myTurn)
@@ -138,48 +138,53 @@ public class MatchController : MonoBehaviour
 		RaycastHit[] hits;
 		for (int i = 0; i < Input.touchCount; ++i) 
 		{
+			Debug.Log("Hit1");
 			if (Input.GetTouch(i).phase.Equals(TouchPhase.Began)) 
 			{
 				Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(i).position);
 				hits = Physics.RaycastAll(ray);
-				foreach(RaycastHit hit in hits) 
-				{
-					if(hit.transform.gameObject.CompareTag("oPlayer"))
-					{
-						hit.transform.gameObject.SendMessage("OnMouseDown");
-						return;
-					}
-			 	}
+				Debug.Log("Hit2");
+//				foreach(RaycastHit hit in hits) 
+//				{
+//					if(hit.transform.gameObject.CompareTag("oPlayer"))
+//					{
+//						hit.transform.gameObject.SendMessage("OnMouseDown");
+//						return;
+//					}
+//			 	}
 				
 				for( int j = 0; j < hits.Length; ++j ){
-				RaycastHit hit = hits[ j ];
+					Debug.Log("Hit3");
+					RaycastHit hit = hits[ j ];
 				//foreach(RaycastHit hit in hits) 
 				//{
 					var layerMask = 1 << 8;
 					layerMask = ~layerMask;
 
-					//if (Physics.Raycast (transform.position,transform.TransformDirection (Vector3.forward),out hit, Mathf.Infinity, layerMask)) {
+					if (Physics.Raycast (transform.position,transform.TransformDirection (Vector3.forward),out hit, Mathf.Infinity, layerMask)) {
 
 						if(hit.transform.gameObject.CompareTag("oTile"))
 						{
-							hit.transform.gameObject.SendMessage("OnMouseDown");
+							Debug.Log("Hit4");
+							//hit.transform.gameObject.SendMessage("OnMouseDown");
 							return;
 						}
 						else
 						if(hit.transform.gameObject.CompareTag("oCard"))
 						{
+							Debug.Log("Hit4");
 							GameObject objCard;
 							objCard = hit.transform.gameObject;
 							CardController script = objCard.GetComponent<CardController>();
 						
 							uint g = 0;
-							script.OnMouseDown( g );
+							script.OnTap( g );
 							
 							//hit.transform.gameObject.SendMessage("OnMouseDown");
 						
 							return;
 						}
-					//}
+					}
 			 	}
 		   }
 	   }

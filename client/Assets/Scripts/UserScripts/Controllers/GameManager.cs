@@ -43,7 +43,7 @@ public class GameManager : MonoBehaviour {
 	{
 		if(!nameSet)
 		{
-			if(Application.loadedLevelName.Equals("JasTestScene"))
+			if(Application.loadedLevelName.Equals("WinterFellScene"))
 			{
 				SetThePlayerName();
 			}
@@ -57,23 +57,23 @@ public class GameManager : MonoBehaviour {
 	
 	public void StartMatch(int matchId)
 	{
-		/*
+		
 		foreach(GameObject obj in matchList)
 		{
 			Match match = obj.GetComponent<Match>();
 			if(match.GetMatchId() == matchId)
 			{
-				StartCoroutine("LoadScene", "JasTestScene");
-				while(!Application.loadedLevelName.Equals("JasTestScene"))
+				StartCoroutine("LoadScene", "WinterFellScene");
+				while(!Application.loadedLevelName.Equals("WinterFellScene"))
 				{
-					StartCoroutine("LoadScene", "None");
+					//StartCoroutine("LoadScene", "None");
 				}
 				GameObject matchController = GameObject.Find("MatchController");
 				matchController.GetComponent<MatchController>().Init(matchId, match.GetPlayerName(), match.GetPlayerTeam(), match.GetOpponentName(), match.GetOpponentTeam(), match.isFacingRight(), match.isMyTurn());
 			}
 		}
-		*/
-		StartCoroutine("LoadScene", "JasTestScene");
+		
+		StartCoroutine("LoadScene", "WinterFellScene");
 	}
 	
 	IEnumerator LoadScene(string sceneToLoad)

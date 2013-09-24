@@ -15,9 +15,20 @@ public class CardController : MonoBehaviour {
 	
 	}
 	
-	public void OnMouseDown( uint touchposition_ )
+	public void OnMouseDown()
 	{
-		//Debug.Log( touchposition_ );//+ " " touchposition_.y + " " + touchposition_.z );
+		//Debug.Log(StackTraceUtility.ExtractStackTrace().ToString());
+		
+	}
+	
+	public void OnMouseDrag()
+	{
+		Debug.Log("Card Dragged");
+	}
+	
+	public void OnTap( uint touchposition_ )
+	{
+		Debug.Log( touchposition_ );//+ " " touchposition_.y + " " + touchposition_.z );
 	}
 	
 	

@@ -14,9 +14,9 @@ public class UnitController : MonoBehaviour {
 	public uint damage = 3;
 	public uint meleeArmour = 1;
 	public uint rangedArmour = 2;
-	public int moveRangeLR = 1;
-	public int moveRangeUD = 1;
-	public int moveRangeDiag;
+	public int moveRangeLR = 2;
+	public int moveRangeUD = 2;
+	public int moveRangeDiag = 2;
 	
 	public bool unitDiag = false;
 	
