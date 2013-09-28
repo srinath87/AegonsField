@@ -493,7 +493,7 @@ public class UnitController : MonoBehaviour {
 	public void setUnitRotation( Vector3 location )
 	{
 		Vector3 destination = new Vector3( location.x , transform.position.y , location.z ); // ignore Y axis in the rotation.
-        Quaternion targetRotation = Quaternion.LookRotation(destination - transform.position, Vector3.up);
+        Quaternion targetRotation = Quaternion.LookRotation(destination - transform.position, Vector3.up) * Quaternion.Euler(0f, 90f, 0f);
     	transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 6.0f );
 	}
 	
