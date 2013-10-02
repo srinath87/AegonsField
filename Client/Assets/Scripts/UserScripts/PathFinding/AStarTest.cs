@@ -128,7 +128,7 @@ public class AStarTest : MonoBehaviour {
 			
 			for (int j = 0; j < _numCols; j++) {
 				//GameObject go = GameObject.Instantiate(nodePrefab) as GameObject;
-				GameObject go = ( GameObject )Instantiate( Resources.Load( "Levels/TestLevels/JasTestScene/JTS_Tile" ) );
+				GameObject go = ( GameObject )Instantiate( Resources.Load( "JTS_Tile" ) );
 				//GameObject go = GameObject.Instantiate( Resources.Load( "Levels/TestLevels/JasTestScene/JTS_Tile" ) );
 				
 				scene0Script.tileArray[ scene0Script.tileIndex ] = go;
