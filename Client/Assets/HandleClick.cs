@@ -11,7 +11,9 @@ public class HandleClick : MonoBehaviour {
 	bool mIsDragging = false;
 	Transform mParent;
 	
-	
+	bool selectedTile;
+	float xOld;
+	float yOld;
 	
 	/// <summary>
 	/// Cache the transform.
@@ -26,6 +28,9 @@ public class HandleClick : MonoBehaviour {
 	
 	void Start () {
 		onPress = false;
+		selectedTile = false;
+		xOld = transform.position.x;
+		yOld = transform.position.y;
 	}
 	//.
 
@@ -37,6 +42,24 @@ public class HandleClick : MonoBehaviour {
 			
 			
 		//}
+		
+		
+		if ( false == onPress ){
+			
+			if ( xOld != transform.position.x && yOld != transform.position.y ){
+			
+				transform.position = Vector3.MoveTowards(transform.position, new Vector3(xOld, yOld, transform.position.z ), Time.deltaTime * 16.0f );
+				
+			}
+			/*
+			if ( true == moved ){
+				
+			}
+			*/
+		}
+
+		
+		
 	}
 	//.
 	
@@ -89,14 +112,14 @@ public class HandleClick : MonoBehaviour {
 				//mTrans.parent = DragDropRoot.root; //what's this used for?
 				
 				Vector3 pos = mTrans.localPosition;
-				pos.z = 0f;
+				pos.z = 0.0f;
 				mTrans.localPosition = pos;
 				
 				//mTrans.BroadcastMessage("CheckParent", SendMessageOptions.DontRequireReceiver); //what's this used for?
 			}
 			else
 			{
-				mTrans.localPosition += ( Vector3 ) delta;
+				mTrans.localPosition += ( Vector3 ) delta;// * 2.15f;
 			}
 		}
 		
@@ -108,9 +131,14 @@ public class HandleClick : MonoBehaviour {
 	//step 3
 	void OnClick(){
 		Debug.Log( "Ended");
+
 		onPress = false;
 	}
 	//.
+	
+
+	
+	
 	
 	
 	//step 0

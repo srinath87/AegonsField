@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
+[AddComponentMenu("NGUI/Examples/Drag & Drop Surface")]
 public class TileController : MonoBehaviour {
 	
 	
@@ -11,13 +12,49 @@ public class TileController : MonoBehaviour {
 	public MatchController matchController;
 	public string col = "white";
 	// Use this for initialization
+	public bool rotatePlacedObject = false;
+	
+	
+	private JTSScene0 scene0Script;
+	
 	void Start () 
 	{
+		
+		GameObject pObj_;
+		pObj_ = GameObject.FindWithTag("oScene0");
+		scene0Script = pObj_.GetComponent<JTSScene0>();
+		
 		gameObject.AddComponent("InputInterface");
+		//gameObject.AddComponent("DragDropSurfaceTile");
 		UnHighlightTile();
 		matchController = GameObject.Find("MatchControllerObj").GetComponent<MatchController>();
 		isOccupied = false;
 	}
+	
+
+
+
+	
+
+	void OnDrop (GameObject go)
+	{
+		
+		CardController ddo = go.GetComponent<CardController>();
+		
+		if (ddo != null)
+		{
+			scene0Script.addPlayer( transform.position );
+			HighlightTile( "highlight" );
+			GameObject child = NGUITools.AddChild(gameObject, ddo.prefab);
+
+			Transform trans = child.transform;
+			trans.position = UICamera.lastHit.point;
+			if (rotatePlacedObject) trans.rotation = Quaternion.LookRotation(UICamera.lastHit.normal) * Quaternion.Euler(90f, 0f, 0f);
+			Destroy(go);
+		}
+	}
+
+	
 	
 	public void HighlightTile( string colour_ )
 	{
@@ -49,7 +86,7 @@ public class TileController : MonoBehaviour {
 	
 	public void OnMouseDown()
 	{
-		//Debug.Log("Tile Tapped!");
+		Debug.Log("Tile Tapped!");
 		if ( isHighlighted )	
 		{
 			

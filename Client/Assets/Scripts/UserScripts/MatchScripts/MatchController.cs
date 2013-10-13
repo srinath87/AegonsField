@@ -172,13 +172,13 @@ public class MatchController : MonoBehaviour
 						else
 						if(hit.transform.gameObject.CompareTag("oCard"))
 						{
-							Debug.Log("Hit4");
-							GameObject objCard;
-							objCard = hit.transform.gameObject;
-							CardController script = objCard.GetComponent<CardController>();
+							//Debug.Log("Hit4");
+							//GameObject objCard;
+							//objCard = hit.transform.gameObject;
+							//CardController script = objCard.GetComponent<CardController>();
 						
-							uint g = 0;
-							script.OnTap( g );
+							//uint g = 0;
+							//script.OnTap( g );
 							
 							//hit.transform.gameObject.SendMessage("OnMouseDown");
 						

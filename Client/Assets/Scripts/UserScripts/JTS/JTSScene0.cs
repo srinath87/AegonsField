@@ -96,6 +96,17 @@ public class JTSScene0 : MonoBehaviour {
 		
 		
 	}
+	
+	public void addPlayer( Vector3 position_ ){
+		GameObject ins = ( GameObject )Instantiate( Resources.Load( "Common/Units/PF_Swordsman" ) );
+		ins.transform.position = position_;
+		ins.AddComponent("UnitController");
+		ins.transform.localEulerAngles = new Vector3( 0.0f , 180.0f , 0.0f );
+		ins.GetComponent<UnitController>().unitOwner = "player1";
+		ins.GetComponent<UnitController>().unitID = 1; //debug
+		playerArray[ playerIndex ] = ins;	
+		playerIndex++;
+	}
 
 	void startEnemy_debug() {
 		

@@ -37,7 +37,7 @@ public class DragDropItem : MonoBehaviour
 		// Is there a droppable container?
 		Collider col = UICamera.lastHit.collider;
 		DragDropContainer container = (col != null) ? col.gameObject.GetComponent<DragDropContainer>() : null;
-
+		Debug.Log( container );
 		if (container != null)
 		{
 			// Container found -- parent this object to the container
@@ -72,6 +72,7 @@ public class DragDropItem : MonoBehaviour
 
 	void OnDrag (Vector2 delta)
 	{
+		
 		if (UICamera.currentTouchID > -2)
 		{
 			if (!mIsDragging)
