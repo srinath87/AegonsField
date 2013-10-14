@@ -45,12 +45,12 @@ public class TileController : MonoBehaviour {
 		{
 			scene0Script.addPlayer( transform.position );
 			HighlightTile( "highlight" );
-			GameObject child = NGUITools.AddChild(gameObject, ddo.prefab);
+			//GameObject child = NGUITools.AddChild(gameObject, ddo.prefab);
 
-			Transform trans = child.transform;
-			trans.position = UICamera.lastHit.point;
-			if (rotatePlacedObject) trans.rotation = Quaternion.LookRotation(UICamera.lastHit.normal) * Quaternion.Euler(90f, 0f, 0f);
-			Destroy(go);
+			//Transform trans = child.transform;
+			//trans.position = UICamera.lastHit.point;
+			//if (rotatePlacedObject) trans.rotation = Quaternion.LookRotation(UICamera.lastHit.normal) * Quaternion.Euler(90f, 0f, 0f);
+			//Destroy(go);
 		}
 	}
 
