@@ -43,8 +43,8 @@ public class TileController : MonoBehaviour {
 		
 		if (ddo != null)
 		{
-			scene0Script.addPlayer( transform.position );
-			matchController.PerformSpawnAction("UnitName", transform.position);
+			//scene0Script.addPlayer( transform.position );
+			matchController.PerformSpawnAction("PF_Swordsman", transform.position);
 			HighlightTile( "highlight" );
 			//GameObject child = NGUITools.AddChild(gameObject, ddo.prefab);
 

@@ -52,7 +52,7 @@ public class UnitController : MonoBehaviour {
 		//renderer.material.color = new Color( 1 , 1 , 1 , 0.5f );
 		gameObject.AddComponent("InputInterface");
 		
-		matchController = GameObject.Find("MatchControllerObj").GetComponent<MatchController>();
+		//matchController = GameObject.Find("MatchControllerObj").GetComponent<MatchController>();
 		gameObject.tag = "Unit";
 		
 		movementArray = new List<Vector3>();
@@ -62,6 +62,7 @@ public class UnitController : MonoBehaviour {
 		scene0Script = pObj_.GetComponent<JTSScene0>();
 		tilesArray = scene0Script.tileArray;
 		enemyArray = scene0Script.enemyArray_debug;
+		
 		currentState = UnitState.CREATED;
 	}
 	
@@ -69,6 +70,12 @@ public class UnitController : MonoBehaviour {
 		movementArray = vector3array_;
 	}
 	
+	public void Init(string unitOwner, int unitId, MatchController matchController)
+	{
+		this.unitOwner = unitOwner;
+		this.unitID = unitID;
+		this.matchController = matchController;
+	}
 	
 	void HighlightAll()	{
 

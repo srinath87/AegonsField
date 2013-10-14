@@ -282,7 +282,17 @@ public class MatchController : MonoBehaviour
 	
 	public void SpawnUnit(string owner, string unitToSpawn, Vector3 spawnLocation, int unitId)
 	{
-		Debug.Log("Spawned : Common/Units/"+unitToSpawn);
+		//Debug.Log("Spawned : Common/Units/"+unitToSpawn);
+		GameObject newUnit = Instantiate(Resources.Load("Common/Units/"+unitToSpawn)) as GameObject;		
+		if(newUnit != null)
+		{
+			newUnit.transform.position = spawnLocation;
+			UnitController cont = newUnit.GetComponent<UnitController>();
+			if(cont != null)
+			{
+				cont.Init(owner, unitId, this);
+			}
+		}
 	}
 	
 	public void SetPendingActions(List<Action> pendActions)
@@ -392,9 +402,7 @@ public class MatchController : MonoBehaviour
 			RecordSpawnAction(owner, unitToSpawn, spawnLocation, unitId);
 			actionsLeft--;
 		}
-		Debug.Log("Spawn1");
 		SpawnUnit( owner, unitToSpawn, spawnLocation, unitId );
-		Debug.Log("Spawn1");
 	}
 	
 	public void PerformSpawnAction(string unitToSpawn, Vector3 spawnLocation)
