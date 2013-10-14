@@ -70,7 +70,7 @@ public class UnitController : MonoBehaviour {
 		movementArray = vector3array_;
 	}
 	
-	public void Init(string unitOwner, int unitId, MatchController matchController)
+	public void Init(string unitOwner, int unitID, MatchController matchController)
 	{
 		this.unitOwner = unitOwner;
 		this.unitID = unitID;
@@ -104,6 +104,7 @@ public class UnitController : MonoBehaviour {
 		{
 			case UnitState.CREATED:	// Creation stuff if applicable;
 				SetState(2);
+				matchController.inAction = false;
 				break;
 			case UnitState.IDLE: 
 				

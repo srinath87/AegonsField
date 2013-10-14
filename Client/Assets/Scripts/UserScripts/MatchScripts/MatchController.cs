@@ -282,7 +282,7 @@ public class MatchController : MonoBehaviour
 	
 	public void SpawnUnit(string owner, string unitToSpawn, Vector3 spawnLocation, int unitId)
 	{
-		//Debug.Log("Spawned : Common/Units/"+unitToSpawn);
+		Debug.Log("Spawned : Common/Units/"+unitToSpawn);
 		GameObject newUnit = Instantiate(Resources.Load("Common/Units/"+unitToSpawn)) as GameObject;		
 		if(newUnit != null)
 		{
