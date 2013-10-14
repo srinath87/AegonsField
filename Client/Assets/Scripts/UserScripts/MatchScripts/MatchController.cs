@@ -21,6 +21,7 @@ public class MatchController : MonoBehaviour
 	public bool inAction;
 	private bool hasPendingAction;
 	private List<Action> pendingActions;
+	private GameManager manager;
 	
 	// Use this for initialization
 	void Start () 
@@ -29,8 +30,8 @@ public class MatchController : MonoBehaviour
 		opponentName = "";
 		//playerName = "1";
 		selectedUnit = null;
-		actionsLeft = 200;
-		myTurn = false;
+		actionsLeft = 5;
+		myTurn = true;
 		actionsInTurn = new List<Action>();
 		pendingActions = new List<Action>();
 		turnSubmitted = false;
@@ -39,11 +40,14 @@ public class MatchController : MonoBehaviour
 		hasPendingAction = false;
 	}
 	
-	public void FixedUpdate()
+	public void Update()
 	{
-		if(myTurn && actionsLeft <=0 && !turnSubmitted && !showSubmitButton)
+		if(myTurn)
 		{
-			showSubmitButton = true;
+			if(actionsLeft <=0 && !turnSubmitted && !showSubmitButton)
+			{
+				showSubmitButton = true;
+			}
 		}
 		if(!inAction && hasPendingAction)
 		{
@@ -62,8 +66,16 @@ public class MatchController : MonoBehaviour
 			}
 				
 		}
+		if(manager == null)
+		{
+			GameObject gameController = GameObject.Find("GameController");
+			if(gameController != null)
+			{
+				manager = gameController.GetComponent<GameManager>();	
+			}
+		}
 		//RaycastToMouseClick();
-		TouchScreen();
+		//TouchScreen();
 	}
 	
 	public void Init(int matchID, string playerName, string playerTeam, string opponentName, string opponentTeam, bool facingRight, bool myTurn)
@@ -103,10 +115,8 @@ public class MatchController : MonoBehaviour
 	{
 		if(showSubmitButton)
 		{
-			if (GUI.Button (new Rect (10,10,150,100), "SubmitTurn")) 
+			if (GUI.Button (new Rect (5,1,150,100), "SubmitTurn")) 
 			{
-				GameObject gameController = GameObject.Find("GameController");
-				GameManager manager = gameController.GetComponent<GameManager>();
 				if(manager != null)
 				{
 					manager.SubmitTurn(actionsInTurn);
@@ -270,6 +280,11 @@ public class MatchController : MonoBehaviour
 		
 	}
 	
+	public void SpawnUnit(string owner, string unitToSpawn, Vector3 spawnLocation, int unitId)
+	{
+		Debug.Log("Spawned : Common/Units/"+unitToSpawn);
+	}
+	
 	public void SetPendingActions(List<Action> pendActions)
 	{
 		//Debug.Log(pendActions.Count);
@@ -290,6 +305,8 @@ public class MatchController : MonoBehaviour
 		inAction = true;
 		int unitId, targetId;
 		Vector3 targetLocation;
+		Vector3 spawnLocation;
+		string unitToSpawn;
 		Action currentAction = (pendingActions.ToArray())[0];
 		Actions act = currentAction.GetActionType();
 		switch(act)
@@ -305,6 +322,13 @@ public class MatchController : MonoBehaviour
 				unitId = currentAction.GetUnitID();
 				targetId = currentAction.GetTargetId();
 				PerformAttackAction(opponentName, unitId, targetId);
+				pendingActions.Remove(currentAction);
+				break;
+			case Actions.SPAWN:
+				unitToSpawn = currentAction.GetUnitToSpawn();
+				spawnLocation = currentAction.GetSpawnLocation();
+				unitId = currentAction.GetUnitID();
+				PerformSpawnAction(opponentName, unitToSpawn, spawnLocation, unitId);
 				pendingActions.Remove(currentAction);
 				break;
 		}
@@ -335,11 +359,7 @@ public class MatchController : MonoBehaviour
 		selectedUnit.GetComponent<UnitController>().CopyMovementArray( AStar.GetVectorArray());
 		
 		PerformMoveAction(playerName, selectedUnit.GetComponent<UnitController>().GetUnitId(), targetLocation);
-	}
-	
-	
-	
-	
+	}	
 	
 	
 	public void PerformAttackAction( string owner , int attackerId , int targetId )
@@ -361,6 +381,27 @@ public class MatchController : MonoBehaviour
 		PerformAttackAction(playerName, selectedUnit.GetComponent<UnitController>().GetUnitId(), targetId);
 	}
 	
+	public void PerformSpawnAction(string owner, string unitToSpawn, Vector3 spawnLocation, int unitId)
+	{
+		if( owner.Equals(playerName) )
+		{
+			if(actionsLeft <= 0)
+			{
+				return;
+			}
+			RecordSpawnAction(owner, unitToSpawn, spawnLocation, unitId);
+			actionsLeft--;
+		}
+		Debug.Log("Spawn1");
+		SpawnUnit( owner, unitToSpawn, spawnLocation, unitId );
+		Debug.Log("Spawn1");
+	}
+	
+	public void PerformSpawnAction(string unitToSpawn, Vector3 spawnLocation)
+	{
+		PerformSpawnAction(playerName, unitToSpawn, spawnLocation, GenerateUnitId());
+	}
+	
 	private void RecordMoveAction( string owner , int unitId , Vector3 targetLocation )
 	{
 		Action newAction = new Action();
@@ -369,12 +410,24 @@ public class MatchController : MonoBehaviour
 		//actionsLeft--;
 	}
 	
-	public void RecordAttackAction( string owner , int attackerId , int targetId )
+	private void RecordAttackAction( string owner , int attackerId , int targetId)
 	{
 		Action newAction = new Action();
 		newAction.Init(2, attackerId, targetId);
 		actionsInTurn.Add(newAction);
 		//actionsLeft--;
+	}
+	
+	private void RecordSpawnAction(string owner, string unitToSpawn, Vector3 unitLocation, int unitId )
+	{
+		Action newAction = new Action();
+		newAction.Init(4, unitToSpawn, unitLocation, unitId);
+		actionsInTurn.Add(newAction);
+	}
+	
+	public int GenerateUnitId()
+	{
+		return 1;
 	}
 	
 	public void UnHighlightTiles()

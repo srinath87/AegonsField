@@ -118,6 +118,13 @@ public class NetworkInit : MonoBehaviour {
 							action.SetTargetId(m.GetInt(2));
 							pendingActions.Add(action);
 							break;
+						case Actions.SPAWN:
+							//Debug.Log("SPAWN...");
+							action.SetUnitToSpawn(m.GetString(1));
+							action.SetUnitId(m.GetInteger(2));
+							action.SetSpawnLocation(m.GetFloat(3), m.GetFloat(4), m.GetFloat(5));
+							pendingActions.Add(action);
+							break;					
 					}
 					break;
 				case "TurnEnd": 
@@ -146,7 +153,8 @@ public class NetworkInit : MonoBehaviour {
 			Debug.Log(action.GetActionType().ToString());
 			switch(action.GetActionType())
 			{
-				case Actions.MOVE: m.Add(action.GetUnitID());
+				case Actions.MOVE: 
+					m.Add(action.GetUnitID());
 					m.Add(action.GetTargetLocation().x);
 					m.Add(action.GetTargetLocation().y);
 					m.Add(action.GetTargetLocation().z);
@@ -157,11 +165,21 @@ public class NetworkInit : MonoBehaviour {
 					//Debug.Log(action.GetActionType().ToString());
 					break;
 				
-				case Actions.ATTACK: m.Add(action.GetUnitID());
+				case Actions.ATTACK: 
+					m.Add(action.GetUnitID());
 					m.Add(action.GetTargetId());
 					//Debug.Log("****");
 					pioconnection.Send(m);
 					//Debug.Log(action.GetActionType().ToString());
+					break;
+					
+				case Actions.SPAWN: 
+					m.Add(action.GetUnitToSpawn());
+					m.Add(action.GetUnitID());
+					m.Add(action.GetSpawnLocation().x);
+					m.Add(action.GetSpawnLocation().y);
+					m.Add(action.GetSpawnLocation().z);
+					pioconnection.Send(m);
 					break;
 			}
 			//actionsToSubmit.Remove(action);

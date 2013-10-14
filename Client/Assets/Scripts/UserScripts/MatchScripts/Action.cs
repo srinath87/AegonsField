@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum Actions {MOVE=1, ATTACK=2, POWER=3};
+public enum Actions {MOVE=1, ATTACK=2, POWER=3, SPAWN=4};
 
 namespace AssemblyCSharp
 {
@@ -13,6 +13,8 @@ namespace AssemblyCSharp
 		int unitId;
 		int targetId;
 		Vector3 targetLocation;
+		Vector3 spawnLocation;
+		string unitToSpawn;
 					
 		public Action ()
 		{
@@ -30,7 +32,7 @@ namespace AssemblyCSharp
 		}
 		
 		/**
-		 * Overload for Move Action
+		 * Overload for Attack Action
 		 */
 		public void Init(int type, int attackerId, int targetId)
 		{
@@ -38,6 +40,18 @@ namespace AssemblyCSharp
 			Debug.Log(actionType.ToString());
 			this.unitId = attackerId;
 			this.targetId = targetId;
+		}
+		
+		/**
+		 * Overload for Spawn Action
+		 */
+		public void Init(int type, string unitToSpawn, Vector3 spawnLocation, int unitId)
+		{
+			actionType = (Actions)type;
+			Debug.Log(actionType.ToString());
+			this.unitToSpawn = unitToSpawn;
+			this.spawnLocation = spawnLocation;
+			this.unitId = unitId;
 		}
 		
 		public Actions GetActionType()
@@ -78,6 +92,26 @@ namespace AssemblyCSharp
 		public void SetTargetLocation(float x, float y, float z)
 		{
 			targetLocation = new Vector3(x, y, z);
+		}
+		
+		public Vector3 GetSpawnLocation()
+		{
+			return spawnLocation;
+		}
+		
+		public void SetSpawnLocation(float x, float y, float z)
+		{
+			spawnLocation = new Vector3(x, y, z);
+		}
+		
+		public string GetUnitToSpawn()
+		{
+			return unitToSpawn;
+		}
+		
+		public void SetUnitToSpawn(string unitToSpawn)
+		{
+			this.unitToSpawn = unitToSpawn;
 		}
 	}
 }
