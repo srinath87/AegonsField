@@ -43,7 +43,17 @@ public class HandleClick : MonoBehaviour {
 			
 		//}
 		
+		if(Input.GetMouseButton(0)){
 		
+			Debug.Log("Held");
+		
+		}
+		
+		else{
+		
+			Debug.Log("Not held");
+			onPress = false;
+		}
 		if ( false == onPress ){
 			
 			if ( xOld != transform.position.x && yOld != transform.position.y ){
@@ -119,7 +129,22 @@ public class HandleClick : MonoBehaviour {
 			}
 			else
 			{
-				mTrans.localPosition += ( Vector3 ) delta;// * 2.15f;
+				//Vector3 v3 = new Vector3( delta.x , delta.y , 0 );
+				//mTrans.localPosition += v3;
+				
+				
+				var mousePos = Input.mousePosition;
+				mousePos.x -= Screen.width/2;
+				mousePos.y -= Screen.height/2;
+				mTrans.localPosition = ( Vector3 ) mousePos;
+				//var mousePos = Input.mousePosition;
+				//var wantedPos = Camera.main.ScreenToWorldPoint (Vector3 (mousePos.x, mousePos.y, 10.0f));
+     //var mousePos = Input.mousePosition;
+
+     //var wantedPos = Camera.main.ScreenToWorldPoint (Vector3 (mousePos.x, mousePos.y, depth));
+
+     			//mTrans.localPosition = wantedPosition;
+				
 			}
 		}
 		
