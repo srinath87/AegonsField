@@ -14,6 +14,7 @@ public class JTSScene0 : MonoBehaviour {
 	
 	public GameObject[] enemyArray_debug;
 	public uint enemyIndex_debug;	
+	private CardPanel panelScript;
 	
 	// Use this for initialization
 	void Start () {
@@ -29,6 +30,14 @@ public class JTSScene0 : MonoBehaviour {
 		
 		startPlayer();
 		startEnemy_debug(); // delete EVERYTHING with -debug
+		
+		
+		GameObject pObj_;
+		pObj_ = GameObject.FindWithTag("oCardPanel");
+		//panelScript = pObj_.GetComponent<CardPanel>();
+		GameObject go = ( GameObject )Instantiate( Resources.Load( "JTS_Card" ) );
+		go.transform.parent = pObj_.transform;
+		go.transform.position = new Vector3( -300.0f , -290.0f , 0.0f );
 		
 		
 	}

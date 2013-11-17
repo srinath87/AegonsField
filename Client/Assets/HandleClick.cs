@@ -29,6 +29,7 @@ public class HandleClick : MonoBehaviour {
 	void Start () {
 		onPress = false;
 		selectedTile = false;
+		transform.position = new Vector3( 0.0f , 0.0f , 0.0f );// newly added
 		xOld = transform.position.x;
 		yOld = transform.position.y;
 	}

@@ -8,7 +8,7 @@ public class CardController : MonoBehaviour {
 	/// <summary>
 	/// Prefab object that will be instantiated on the DragDropSurface if it receives the OnDrop event.
 	/// </summary>
-
+	public string unitType;
 	public GameObject prefab;
 
 	Transform mTrans;
@@ -22,7 +22,7 @@ public class CardController : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-	
+		unitType = "PF_Swordsman";
 	}
 	
 	// Update is called once per frame
